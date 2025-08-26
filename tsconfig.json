@@ -1,0 +1,22 @@
+{
+       "compilerOptions": {
+              "module": "nodenext",
+              "target": "esnext",
+              "outDir": "dist",
+              "lib": [
+                     "ESNext"
+              ],
+              "removeComments": true,
+              "declaration": false,
+              "experimentalDecorators": false,
+              "resolveJsonModule": false,
+       },
+       "exclude": [
+              "node_modules",
+              "dist",
+              "build"
+       ],
+       "include": [
+              "src",
+       ],
+}
