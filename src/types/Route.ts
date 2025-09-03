@@ -24,15 +24,33 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { Request, Response } from "hyper-express";
+import { Request, Response, Websocket } from "hyper-express";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see Router options type
+ * @see Websocket specific @see Router options 
+ * 
+ * @public
  */
-export type Route = {
-       handler: ( request: Request, response: Response ) => void;
-       method: "GET" | "POST" | "PUT" | "DELETE";
+export type WebsocketRoute = {
+       handler: ( socket: Websocket ) => void;
+       method: "WS";
        path: string;
 };
+
+/**
+ * HTTP specific @see Router options
+ * 
+ * @public
+ */
+export type HttpRoute = {
+       handler: ( request: Request, response: Response ) => void;
+       method: "GET" | "POST" | "PUT" | "DELETE" | "TRACE";
+       path: string;
+};
+
+/**
+ * @see Router options type
+ */
+export type Route = HttpRoute | WebsocketRoute;
