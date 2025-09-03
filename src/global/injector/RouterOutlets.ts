@@ -24,9 +24,11 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ScriptRouterOutlet } from "../../components/routers/ScriptRouteOutlet";
-import { GLOBAL_LOG_PROVIDER, GLOBAL_ROUTE_OUTLETS } from "./inject.tokens";
+import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_ROUTE_OUTLETS } from "./inject.tokens";
+import { WebSocketRouterOutlet } from "../../components/routers/WebSocketRouterOutlet";
+import { ScriptRouterOutlet } from "../../components/routers/ScriptRouterOutlet";
 import { RouterOutlet } from "../../components/routers/Router";
+import { ConfigurationService } from "@geeko/configuration";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";
 
@@ -42,13 +44,13 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> =>
 {
        return {
               provide: GLOBAL_ROUTE_OUTLETS,
-              useFactory: async ( logger: LogService ): Promise<Array<RouterOutlet>> =>
+              useFactory: async ( logger: LogService, configuration: ConfigurationService ): Promise<Array<RouterOutlet>> =>
               {
-                     const outlets: Array<RouterOutlet> = [];
-                     outlets.push( new ScriptRouterOutlet() );
-
-                     return outlets;
+                     return [
+                            new ScriptRouterOutlet(),
+                            new WebSocketRouterOutlet()
+                     ];
               },
-              inject: [ GLOBAL_LOG_PROVIDER ]
+              inject: [ GLOBAL_LOG_PROVIDER, GLOBAL_CONFIGURATION_PROVIDER ]
        };
 };
