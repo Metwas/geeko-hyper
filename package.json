@@ -1,36 +1,63 @@
 {
        "name": "@geeko/hyper",
        "version": "0.0.1",
-       "description": "HTTP server for Geeko systems + general static file server",
-       "main": "./dist/geeko-hyper.js",
-       "scripts": {
-              "dev": "tsc -w",
-              "build": "node ./scripts/build/ -n geeko-hyper -t ncc -o dist/ -e production",
-              "pub": "npm run app:build && npm publish --access=public",
-              "test": "node --test",
-              "link": "npm --local unlink @geeko/hyper && npm --local link @geeko/cli",
-              "app:build": "node ./scripts/build/ -n geeko-hyper -t ncc -o dist/ -e production"
-       },
-       "keywords": [
-              "CLI"
-       ],
+       "description": "",
        "author": "Metwas",
+       "private": true,
        "license": "MIT",
-       "repository": {
-              "url": "https://github.com/Metwas/geeko-hyper"
-       },
-       "devDependencies": {
-              "@types/node": "^24.3.0"
+       "scripts": {
+              "build": "nest build",
+              "start": "nest start",
+              "start:dev": "nest start --watch",
+              "start:debug": "nest start --debug --watch",
+              "start:prod": "node dist/main",
+              "test": "jest",
+              "test:watch": "jest --watch",
+              "test:cov": "jest --coverage",
+              "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+              "test:e2e": "jest --config ./test/jest-e2e.json"
        },
        "dependencies": {
-              "@geeko/configuration": "^0.1.3",
-              "@geeko/core": "^1.0.0",
+              "@geeko/configuration": "^0.2.2",
               "@geeko/log": "^1.1.0",
-              "@geeko/net": "^0.3.2",
-              "@geeko/os": "^1.1.0",
               "@geeko/serialization": "^1.2.0",
-              "@geeko/tasks": "^1.1.0",
+              "@nestjs/common": "^11.0.1",
+              "@nestjs/core": "^11.0.1",
+              "@nestjs/microservices": "^11.1.6",
               "hyper-express": "^6.17.3",
-              "tseep": "^1.3.1"
+              "reflect-metadata": "^0.2.2",
+              "rxjs": "^7.8.1"
+       },
+       "devDependencies": {
+              "@nestjs/cli": "^11.0.0",
+              "@nestjs/schematics": "^11.0.0",
+              "@nestjs/testing": "^11.0.1",
+              "@types/jest": "^30.0.0",
+              "@types/node": "^22.10.7",
+              "globals": "^16.0.0",
+              "jest": "^30.0.0",
+              "source-map-support": "^0.5.21",
+              "ts-jest": "^29.2.5",
+              "ts-loader": "^9.5.2",
+              "ts-node": "^10.9.2",
+              "tsconfig-paths": "^4.2.0",
+              "typescript": "^5.4.5"
+       },
+       "jest": {
+              "moduleFileExtensions": [
+                     "js",
+                     "json",
+                     "ts"
+              ],
+              "rootDir": "src",
+              "testRegex": ".*\\.spec\\.ts$",
+              "transform": {
+                     "^.+\\.(t|j)s$": "ts-jest"
+              },
+              "collectCoverageFrom": [
+                     "**/*.(t|j)s"
+              ],
+              "coverageDirectory": "../coverage",
+              "testEnvironment": "node"
        }
 }
