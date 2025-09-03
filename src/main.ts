@@ -24,7 +24,43 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_ROUTE_OUTLETS, HYPER_CTOR_OPTIONS } from './global/injector/inject.tokens';
+import { HyperExpressStrategy } from './components/strategy/HyperHTTPStrategy';
+import { ConfigurationService } from '@geeko/configuration';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { RouterOutlet } from './components/routers/Router';
+import { INestApplicationContext } from '@nestjs/common';
+import { AppModule } from './modules/core/app.module';
+import { NestFactory } from '@nestjs/core';
+import { LogService } from '@geeko/log';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-console.log( "ok" );
+/**
+ * Application bootstrap
+ * 
+ * @public
+ * @param {Array<string>} args
+ */
+( async ( args: Array<string> ): Promise<void> => 
+{
+       const context: INestApplicationContext = await NestFactory.createApplicationContext( AppModule, {
+              logger: false
+       } );
+
+       const configuration: ConfigurationService = context.get( GLOBAL_CONFIGURATION_PROVIDER );
+       const routerOutlets: Array<RouterOutlet> = context.get( GLOBAL_ROUTE_OUTLETS );
+       const logger: LogService = context.get( GLOBAL_LOG_PROVIDER );
+       const hyper: any = context.get( HYPER_CTOR_OPTIONS );
+
+       const http = await NestFactory.createMicroservice<MicroserviceOptions>(
+              AppModule,
+              {
+                     strategy: new HyperExpressStrategy( configuration, logger.branch( "hyper" ), routerOutlets, hyper ),
+                     logger: false
+              },
+       );
+
+       http.listen();
+
+} )( process.argv.slice( 2 ) );
