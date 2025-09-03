@@ -25,11 +25,11 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { CustomTransportStrategy, Server } from '@nestjs/microservices';
-import { ConnectionOptions } from "../../types/ConnectionOptions";
 import { Server as HyperExpressServer, Router } from "hyper-express";
+import { ConnectionOptions } from "../../types/ConnectionOptions";
 import { ConfigurationService } from "@geeko/configuration";
-import { LogService } from "@geeko/log";
 import { RouterOutlet } from '../routers/Router';
+import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -98,7 +98,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
                      }
 
                      /** Finally listen on the configured port & host */
-                     const socket: any = await this._server?.listen( port, host, () =>
+                     await this._server?.listen( port, host, () =>
                      {
                             this.log.verbose( `HTTP server now listening on [port] ${port} [host] ${host}` );
                      } );
