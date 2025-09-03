@@ -24,6 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { RouteOutlet } from "../decorators/RouteOutlet";
+import { Ws } from "../decorators/Websocket";
 import { Websocket } from "hyper-express";
 import { RouterOutlet } from "./Router";
 
@@ -32,7 +34,7 @@ import { RouterOutlet } from "./Router";
 /**
  * @public
  */
-//@RouteOutlet("scripts")
+@RouteOutlet( "ws" )
 export class WebSocketRouterOutlet extends RouterOutlet
 {
        /**
@@ -51,5 +53,11 @@ export class WebSocketRouterOutlet extends RouterOutlet
                             console.log( "Websocket client connected: ", socket );
                      }
               } );
+       }
+
+       @Ws( "connect" )
+       public connect( socket: Websocket ): void
+       {
+              console.log( "Websocket client connected: ", socket );
        }
 }

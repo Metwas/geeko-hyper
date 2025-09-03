@@ -22,43 +22,27 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { Request, Response, Websocket } from "hyper-express";
+import { ROUTE_WS_TOKEN } from "../../global/injector/inject.tokens";
+import { CustomDecorator, SetMetadata } from "@nestjs/common";
+import { WSRouteOptions } from "hyper-express";
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Core @see Route options
+ * @see RouterOutlet Websocket method decorator 
  * 
  * @public
+ * @param {String} uri
+ * @param {RouteOptions} options
+ * @returns {CustomDecorator}
  */
-export type RouteOptions = {
-       method: string;
-       path: string;
+export function Ws( uri?: string | undefined, options?: WSRouteOptions ): CustomDecorator
+{
+       return SetMetadata( ROUTE_WS_TOKEN, {
+              options: options,
+              method: "WS",
+              path: uri
+       } );
 };
-
-/**
- * @see Websocket specific @see Router options 
- * 
- * @public
- */
-export type WebsocketRoute = RouteOptions & {
-       handler: ( socket: Websocket ) => void;
-       method: "WS";
-};
-
-/**
- * HTTP specific @see Router options
- * 
- * @public
- */
-export type HttpRoute = RouteOptions & {
-       handler: ( request: Request, response: Response ) => void;
-       method: "GET" | "POST" | "PUT" | "DELETE" | "TRACE";
-};
-
-/**
- * @see Router options type
- */
-export type Route = HttpRoute | WebsocketRoute;

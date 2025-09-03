@@ -53,3 +53,43 @@ export const HYPER_CTOR_OPTIONS: string = "HYPER_CTOR_OPTIONS";
  * @type {String}
  */
 export const GLOBAL_ROUTE_OUTLETS: string = "GLOBAL_ROUTE_OUTLETS";
+
+/**
+ * @see RouterOutlet decorator token
+ * 
+ * @public
+ * @type {String}
+ */
+export const ROUTE_OUTLET_TOKEN: string = "ROUTE_OUTLET_TOKEN";
+
+/**
+ * Route RESTFul GET method decorator token
+ * 
+ * @public
+ * @type {String}
+ */
+export const ROUTE_GET_TOKEN: string = "ROUTE_GET_TOKEN";
+
+/**
+ * Route RESTFul POST/PUT method decorator token
+ * 
+ * @public
+ * @type {String}
+ */
+export const ROUTE_POST_TOKEN: string = "ROUTE_POST_TOKEN";
+
+/**
+ * Route RESTFul DELETE method decorator token
+ * 
+ * @public
+ * @type {String}
+ */
+export const ROUTE_DELETE_TOKEN: string = "ROUTE_DELETE_TOKEN";
+
+/**
+ * Route Websocket decorator token
+ * 
+ * @public
+ * @type {String}
+ */
+export const ROUTE_WS_TOKEN: string = "ROUTE_WS_TOKEN";

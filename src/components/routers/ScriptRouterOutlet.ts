@@ -24,6 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { Get, Post, Delete } from "../decorators/RESTful";
+import { RouteOutlet } from "../decorators/RouteOutlet";
+import { Request, Response } from "hyper-express";
 import { JsonLike } from "@geeko/serialization";
 import { RouterOutlet } from "./Router";
 
@@ -32,7 +35,7 @@ import { RouterOutlet } from "./Router";
 /**
  * @public
  */
-//@RouteOutlet("scripts")
+@RouteOutlet( "scripts" )
 export class ScriptRouterOutlet extends RouterOutlet
 {
        /**
@@ -44,7 +47,7 @@ export class ScriptRouterOutlet extends RouterOutlet
               super();
 
               this.addRoute( {
-                     path: "/scripts",
+                     path: "/",
                      method: "GET",
                      handler: ( request, response ) =>
                      {
@@ -54,5 +57,11 @@ export class ScriptRouterOutlet extends RouterOutlet
                             return response.html( "Got script from new outlet: " + scriptId );
                      }
               } );
+       }
+
+       @Get( "/" )
+       public async getById( request: Request, response: Response ): Promise<any>
+       {
+              return void 0;
        }
 }
