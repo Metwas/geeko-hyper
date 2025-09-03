@@ -59,15 +59,6 @@ export interface IRouterOutlet
         * @param {Route} route
         */
        addRoute( route: Route ): void;
-
-       /**
-        * Removes the specified @see Route or path, returning the removed @see Route if found
-        * 
-        * @public
-        * @param {Route | String} routeOrPath
-        * @returns {Route}
-        */
-       removeRoute( routeOrPath: Route | string ): Route | undefined;
 }
 
 /**
@@ -151,8 +142,9 @@ export abstract class RouterOutlet implements IRouterOutlet
         * 
         * @public
         * @param {Route} route
+        * @param {WSRouteOptions | RouteOptions} options
         */
-       public addRoute( route: Route ): void
+       public addRoute( route: Route, options?: any ): void
        {
               if ( route && this._routes?.has( route.path ) === false )
               {
@@ -160,50 +152,23 @@ export abstract class RouterOutlet implements IRouterOutlet
                      /** Attach to the underlying @see Router */
                      switch ( route.method )
                      {
+                            case "WS":
+                                   this._router?.ws( route.path, options, route.handler );
+                                   break;
                             case "GET":
-                                   this._router?.get( route.path, route.handler );
+                                   this._router?.get( route.path, options, route.handler );
                                    break;
                             case "PUT":
                             case "POST":
-                                   this._router?.post( route.path, route.handler );
+                                   this._router?.post( route.path, options, route.handler );
                                    break;
                             case "DELETE":
-                                   this._router?.delete( route.path, route.handler );
+                                   this._router?.delete( route.path, options, route.handler );
+                                   break;
+                            case "TRACE":
+                                   this._router?.trace( route.path, options, route.handler );
                                    break;
                      };
-              }
-       }
-
-       /**
-        * Removes the specified @see Route or path, returning the removed @see Route if found
-        * 
-        * @public
-        * @param {Route | String} routeOrPath
-        * @returns {Route}
-        */
-       public removeRoute( routeOrPath: Route | string ): Route | undefined
-       {
-              let path: string | undefined = void 0;
-
-              if ( typeof routeOrPath !== "string" && typeof routeOrPath?.path === "string" )
-              {
-                     path = routeOrPath.path;
-              }
-              else
-              {
-                     path = routeOrPath as string;
-              }
-
-              if ( this._routes?.has( path ) === false )
-              {
-                     return void 0;
-              }
-
-              const route: Route | undefined = this._routes?.get( path );
-
-              if ( this._routes?.delete( path ) )
-              {
-                     return route;
               }
        }
 }
