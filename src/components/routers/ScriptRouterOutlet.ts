@@ -60,7 +60,7 @@ export class ScriptRouterOutlet extends RouterOutlet
        }
 
        @Get( "/" )
-       public async getById( request: Request, response: Response ): Promise<any>
+       public async get( request: Request, response: Response ): Promise<any>
        {
               return void 0;
        }
