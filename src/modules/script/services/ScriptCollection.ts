@@ -137,7 +137,6 @@ export class ScriptCollection extends Collection<Script, string>
                                    mkdirSync( path, { recursive: true } );
                             }
 
-                            await this.loadFromPath( path );
                             this._detector?.watch( { path } );
                      }
               }
@@ -170,8 +169,8 @@ export class ScriptCollection extends Collection<Script, string>
                      try
                      {
                             const fragment: FileFragment = files[ index ];
-                            const fileDirectory: string = fragment[ "directory" ];
-                            const buffer: Buffer = fragment[ "data" ];
+                            const fileDirectory: string = fragment.directory;
+                            const buffer: Buffer = fragment.data;
 
                             const data: any = JSON.parse( buffer.toString() );
                             /** Attempt to get main */
@@ -208,9 +207,10 @@ export class ScriptCollection extends Collection<Script, string>
                                           id: name,
                                    };
 
-                                   if ( this.has( script[ "id" ] ) === false )
+                                   if ( this.has( script.id ) === false )
                                    {
-                                          this.add( script[ "id" ], script );
+                                          this.logger?.verbose( `Added script [${script.id}] path [${script.file}]` );
+                                          this.add( script.id, script );
                                    }
                             }
                      }
@@ -257,16 +257,16 @@ export class ScriptCollection extends Collection<Script, string>
        {
               try
               {
-                     if ( typeof file?.[ "path" ] === "string" )
+                     if ( typeof file?.path === "string" )
                      {
-                            const relativePath: string = file[ "relativePath" ];
-                            const name: string = file[ "name" ];
-                            const type: string = file[ "type" ];
+                            const relativePath: string = file.relativePath;
+                            const name: string = file.name;
+                            const type: string = file.type;
 
                             /** if @see directory and not relative, attempt to load manifest */
                             if ( type === "directory" && !relativePath )
                             {
-                                   this.loadFromPath( file[ "path" ] );
+                                   this.loadFromPath( file.path );
                                    return;
                             }
 
