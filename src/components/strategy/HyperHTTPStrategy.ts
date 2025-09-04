@@ -71,8 +71,11 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
               try
               {
                      const options: ConnectionOptions = await this.configuration.get( { key: "hyper" } );
+
                      const host: string = options?.host ?? "127.0.0.1";
-                     const port: number = options?.port ?? 80;
+                     const port: number = Number( options?.port ?? await this.configuration.get( { key: "GEEKO_HTTP_PORT" }, {
+                            env: true
+                     } ) ) || 3333;
 
                      this.log.verbose( `Initializing HTTP server on [port] ${port} [host] ${host}` );
 
