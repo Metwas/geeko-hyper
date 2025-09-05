@@ -27,7 +27,6 @@
 import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_ROUTE_OUTLETS, HYPER_CTOR_OPTIONS } from './global/injector/inject.tokens';
 import { HyperExpressStrategy } from './components/strategy/HyperHTTPStrategy';
 import { ConfigurationService } from '@geeko/configuration';
-import { MicroserviceOptions } from '@nestjs/microservices';
 import { RouterOutlet } from './components/routers/Router';
 import { INestApplicationContext } from '@nestjs/common';
 import { AppModule } from './modules/core/app.module';
@@ -41,6 +40,7 @@ import { LogService } from '@geeko/log';
  * 
  * @public
  * @param {Array<string>} args
+ * @returns {Promise<void>}
  */
 ( async ( args: Array<string> ): Promise<void> => 
 {
@@ -53,14 +53,7 @@ import { LogService } from '@geeko/log';
        const logger: LogService = context.get( GLOBAL_LOG_PROVIDER );
        const hyper: any = context.get( HYPER_CTOR_OPTIONS );
 
-       const http = await NestFactory.createMicroservice<MicroserviceOptions>(
-              AppModule,
-              {
-                     strategy: new HyperExpressStrategy( configuration, logger.branch( "hyper" ), routerOutlets, hyper ),
-                     logger: false
-              },
-       );
-
+       const http: HyperExpressStrategy = new HyperExpressStrategy( configuration, logger.branch( "hyper" ), routerOutlets, hyper );
        http.listen();
 
 } )( process.argv.slice( 2 ) );
