@@ -31,5 +31,8 @@ const { resolve } = require("node:path");
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-const collection = new ScriptCollection(new FsDetector(), new LogService({ level: "verbose" }));
+const collection = new ScriptCollection(new FsDetector(), new LogService({
+       level: "verbose"
+}));
+
 collection.watch(resolve(__dirname, "./scripts/"));
