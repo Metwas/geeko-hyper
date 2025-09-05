@@ -45,15 +45,15 @@ export class ScriptCollection extends Collection<Script, string>
 {
        /**
         * @public
-        * @param {LogService} logger
+        * @param {LogService} log
         */
-       public constructor( watcher?: FsDetector, private logger?: LogService )
+       public constructor( watcher?: FsDetector, private log?: LogService )
        {
               super();
 
-              if ( !logger )
+              if ( !log )
               {
-                     this.logger = new LogService( {
+                     this.log = new LogService( {
                             title: "Scripts",
                             level: "info"
                      } );
@@ -209,7 +209,7 @@ export class ScriptCollection extends Collection<Script, string>
 
                                    if ( this.has( script.id ) === false )
                                    {
-                                          this.logger?.verbose( `Added script [${script.id}] path [${script.file}]` );
+                                          this.log?.verbose( `Added script [${script.id}] path [${script.file}]` );
                                           this.add( script.id, script );
                                    }
                             }
@@ -344,16 +344,16 @@ export class ScriptCollection extends Collection<Script, string>
        }
 
        /**
-        * Message handler/logger
+        * Message handler/log
         * 
         * @protected
         * @param {String} message 
         */
        protected onMessage( message: string ): void
        {
-              if ( this.logger )
+              if ( this.log )
               {
-                     this.logger.verbose( message );
+                     this.log.verbose( message );
               }
        }
 
@@ -365,9 +365,9 @@ export class ScriptCollection extends Collection<Script, string>
         */
        protected onError( error: Error | string ): void
        {
-              if ( this.logger )
+              if ( this.log )
               {
-                     this.logger.error( error );
+                     this.log.error( error );
               }
        }
 

@@ -47,9 +47,9 @@ export class DefaultSourceProvider implements IScriptSourceProvider
         * 
         * @public
         * @param {ConfigurationService} configuration
-        * @param {LogService} logger 
+        * @param {LogService} log 
         */
-       public constructor( private readonly configuration: ConfigurationService, private readonly logger?: LogService ) { }
+       public constructor( private readonly configuration: ConfigurationService, private readonly log?: LogService ) { }
 
        /**
         * Source buffer
@@ -87,13 +87,13 @@ export class DefaultSourceProvider implements IScriptSourceProvider
 
                                    if ( response.ok === false )
                                    {
-                                          this.logger?.error( `Source fetch error: [${response.statusText}]` );
+                                          this.log?.error( `Source fetch error: [${response.statusText}]` );
                                    }
                                    else
                                    {
                                           if ( options?.method === "github" )
                                           {
-                                                 this.logger?.verbose( `Fetching github source` );
+                                                 this.log?.verbose( `Fetching github source` );
                                                  /** Github path will return a @see json object containing the releases */
                                                  const releases: JsonLike = await response.json();
                                                  const assets: Array<any> = releases?.data?.assets;
@@ -103,7 +103,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
 
                                                  if ( length === 0 )
                                                  {
-                                                        this.logger?.error( `Github path [${path}] returned no asset releases` );
+                                                        this.log?.error( `Github path [${path}] returned no asset releases` );
                                                         return void 0;
                                                  }
 
@@ -143,7 +143,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
                                           }
                                           else
                                           {
-                                                 this.logger?.verbose( `Fetching HTTP source` );
+                                                 this.log?.verbose( `Fetching HTTP source` );
                                                  this._buffer = this.normalize( Buffer.from( await response.arrayBuffer() ), options?.wrap );
                                           }
                                    }
@@ -161,11 +161,11 @@ export class DefaultSourceProvider implements IScriptSourceProvider
 
                             if ( ( this._buffer?.length ?? 0 ) > 0 )
                             {
-                                   this.logger?.verbose( `Got source buffer [${this._buffer?.length} bytes]` );
+                                   this.log?.verbose( `Got source buffer [${this._buffer?.length} bytes]` );
                             }
                             else
                             {
-                                   this.logger?.warn( `Buffer returned empty` );
+                                   this.log?.warn( `Buffer returned empty` );
                             }
                      }
 
@@ -173,7 +173,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
               }
               catch ( error )
               {
-                     this.logger?.error( error.message );
+                     this.log?.error( error.message );
               }
        }
 
