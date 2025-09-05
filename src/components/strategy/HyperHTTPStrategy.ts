@@ -61,7 +61,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
        private _server: HyperExpressServer | undefined = void 0;
 
        /**
-        * Triggered when you run "app.listen()".
+        * Initializes the @see HyperExpressServer socket listener
         * 
         * @public
         * @param {Function} callback
@@ -73,7 +73,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
                      const options: ConnectionOptions = await this.configuration.get( { key: "hyper" } );
 
                      const host: string = options?.host ?? "127.0.0.1";
-                     const port: number = Number( options?.port ?? await this.configuration.get( { key: "GEEKO_HTTP_PORT" }, {
+                     const port: number = Number( options?.port ?? await this.configuration.get( "GEEKO_HTTP_PORT", {
                             env: true
                      } ) ) || 3333;
 
