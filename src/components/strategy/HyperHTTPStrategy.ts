@@ -66,7 +66,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
         * @public
         * @param {Function} callback
         */
-       public async listen( callback: () => void ): Promise<void>
+       public async listen( callback?: () => void ): Promise<void>
        {
               try
               {
@@ -106,7 +106,10 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
                             this.log.verbose( `HTTP server now listening on [port] ${port} [host] ${host}` );
                      } );
 
-                     callback();
+                     if ( typeof callback === "function" )
+                     {
+                            callback();
+                     }
               }
               catch ( error )
               {
