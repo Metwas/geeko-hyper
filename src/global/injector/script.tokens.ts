@@ -37,3 +37,43 @@ export const SCRIPT_ENTRY_NAME: string = "main";
  * @type {RegExp}
  */
 export const SCRIPT_MANIFEST: RegExp = /manifest\.json/g;
+
+/**
+ * HTTP path @see RegExp
+ * 
+ * @public
+ * @type {RegExp}
+ */
+export const HTTP_REGEX_PATH: RegExp = /^https?:\/\//i;
+
+/**
+ * Source authentication token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SOURCE_AUTH_TOKEN: string = "SOURCE_AUTH_TOKEN";
+
+/**
+ * Github release asset tag
+ * 
+ * @public
+ * @type {RegExp}
+ */
+export const GIT_RELEASE_TAG: RegExp = /^release/g;
+
+/**
+ * Script wrapper replacement tag
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_REPLACE_TAG: string = "${{}}$";
+
+/**
+ * Default HTML script wrapper, <script>
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_TAG_WRAPPER: string = `<script type="text/javascript" defer>${SCRIPT_REPLACE_TAG}</script>`;

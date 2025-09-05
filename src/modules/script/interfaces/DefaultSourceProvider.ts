@@ -21,83 +21,20 @@
      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      SOFTWARE.
 */
-/**
-     MIT License
-
-     @Copyright (c) Metwas
-
-     Permission is hereby granted, free of charge, to any person obtaining a copy
-     of this software and associated documentation files (the "Software"), to deal
-     in the Software without restriction, including without limitation the rights
-     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     copies of the Software, and to permit persons to whom the Software is
-     furnished to do so, subject to the following conditions:
-
-     The above Copyright notice and this permission notice shall be included in all
-     copies or substantial portions of the Software.
-
-     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     AUTHORS OR Copyright HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     SOFTWARE.
-*/
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { GIT_RELEASE_TAG, HTTP_REGEX_PATH, SCRIPT_REPLACE_TAG, SCRIPT_TAG_WRAPPER, SOURCE_AUTH_TOKEN } from "../../../global/injector/script.tokens";
 import { IScriptSourceProvider } from "./IScriptSourceProvider";
+import { SourceOptions } from "../../../types/SourceOptions";
 import { ConfigurationService } from "@geeko/configuration";
+import { decompress } from "../../../tools/stream";
 import { isAbsolute, resolve } from "node:path";
 import { JsonLike } from "@geeko/serialization";
+import { readFileData } from "@geeko/os";
 import { LogService } from "@geeko/log";
-import { gunzip } from "node:zlib";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-export type SourceOptions = {
-       wrap?: boolean | string;
-       version?: string;
-       method?: string;
-       token?: string;
-       path: string;
-};
-
-export const HTTP_REGEX_PATH: RegExp = /^https?:\/\//i;
-
-/**
- * Source authentication token
- * 
- * @public
- * @type {String}
- */
-export const SOURCE_AUTH_TOKEN: string = "SOURCE_AUTH_TOKEN";
-
-/**
- * Github release asset tag
- * 
- * @public
- * @type {RegExp}
- */
-export const GIT_RELEASE_TAG: RegExp = /^release/g;
-
-/**
- * Script wrapper replacement tag
- * 
- * @public
- * @type {String}
- */
-export const SCRIPT_REPLACE_TAG: string = "${{}}$";
-
-/**
- * Default HTML script wrapper, <script>
- * 
- * @public
- * @type {String}
- */
-export const SCRIPT_TAG_WRAPPER: string = `<script type="text/javascript" defer>${SCRIPT_REPLACE_TAG}</script>`;
-
 
 /**
  * Default file & Http Injectable source provider
@@ -200,7 +137,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
                                                         } );
 
                                                         const buffer: Buffer = Buffer.from( await response.arrayBuffer() );
-                                                        /** This would be compress, there use @see gunzip to deflate */
+                                                        /** This would be compressed, therefore use @see gunzip to deflate */
                                                         this._buffer = this.normalize( await decompress( buffer ), options?.wrap );
                                                  }
                                           }
@@ -218,8 +155,9 @@ export class DefaultSourceProvider implements IScriptSourceProvider
                                    {
                                           path = resolve( process.cwd(), path );
                                    }
-                            }
 
+                                   this._buffer = this.normalize( await readFileData( path ), options?.wrap );
+                            }
 
                             if ( ( this._buffer?.length ?? 0 ) > 0 )
                             {
@@ -279,21 +217,3 @@ export class DefaultSourceProvider implements IScriptSourceProvider
               return buffer;
        }
 }
-
-/**
- * Gzip decompression helper function
- * 
- * @public
- * @param {Buffer} buffer 
- * @returns {Promise<Buffer>}
- */
-const decompress = ( buffer: Buffer ): Promise<Buffer> =>
-{
-       return new Promise( ( resolve, reject ) =>
-       {
-              gunzip( buffer, ( error: Error, decompressed: Buffer ) =>
-              {
-                     error ? reject( error ) : resolve( decompressed );
-              } );
-       } );
-};

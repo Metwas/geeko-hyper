@@ -22,26 +22,49 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import { gunzip } from "node:zlib";
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
 /**
- * Gzip decompression helper function
+ * @see ScriptInjectorService source options
  * 
  * @public
- * @param {Buffer} buffer 
- * @returns {Promise<Buffer>}
  */
-export const decompress = ( buffer: Buffer ): Promise<Buffer> =>
-{
-       return new Promise( ( resolve, reject ) =>
-       {
-              gunzip( buffer, ( error: Error, decompressed: Buffer ) =>
-              {
-                     error ? reject( error ) : resolve( decompressed );
-              } );
-       } );
+export type SourceOptions = {
+       /**
+        * Wraps the source @see Buffer in the specified string tag. Defaults to <script> if set to true 
+        * 
+        * @public
+        * @type {Boolean | String}
+        */
+       wrap?: boolean | string;
+
+       /**
+        * Optional source version filter
+        * 
+        * @public
+        * @type {String}
+        */
+       version?: string;
+
+       /**
+        * Source fetch method, such as 'github' releases
+        * 
+        * @public
+        * @type {String}
+        */
+       method?: string;
+
+       /**
+        * Authentication token for a secure remote server
+        * 
+        * @public
+        * @type {String}
+        */
+       token?: string;
+
+       /**
+        * The source local or remote path
+        * 
+        * @public
+        * @type {String}
+        */
+       path: string;
 };

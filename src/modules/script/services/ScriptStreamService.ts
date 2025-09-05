@@ -24,7 +24,6 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ScriptCollection } from "./ScriptCollection";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -41,11 +40,14 @@ export class ScriptStreamService
         * @param {ScriptCollection} scripts 
         * @param {LogService} logger 
         */
-       public constructor( public readonly scripts: ScriptCollection, private logger?: LogService )
+       public constructor( private logger?: LogService )
        {
-              if ( !scripts )
+              if ( !logger )
               {
-                     this.scripts = new ScriptCollection( void 0, logger );
+                     this.logger = new LogService( {
+                            title: "Script",
+                            level: "verbose"
+                     } );
               }
        }
 }
