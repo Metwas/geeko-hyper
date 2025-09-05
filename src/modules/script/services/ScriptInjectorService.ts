@@ -24,7 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { LogService } from "@geeko/log";
+import { IScriptSourceProvider } from "../interfaces/IScriptSourceProvider";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -37,17 +37,48 @@ export class ScriptInjectorService
 {
        /**
         * @public
-        * @param {ScriptSourceProvider} source 
+        * @param {IScriptSourceProvider} sourceProvider 
         * @param {LogService} logger 
         */
-       public constructor( public readonly source: ScriptSourceProvider, private logger?: LogService )
+       public constructor( public readonly sourceProvider: IScriptSourceProvider )
        {
-              if ( !logger )
+              this.load();
+       }
+
+       /**
+        * Ready state for loading the source provider 
+        * 
+        * @private
+        * @type {Boolean}
+        */
+       private _ready: boolean = false;
+
+       /**
+        * Loads the source from the provided @see IScriptSourceProvider
+        * 
+        * @public
+        * @returns {Promise<void>}
+        */
+       public async load(): Promise<void>
+       {
+              if ( this.sourceProvider )
               {
-                     this.logger = new LogService( {
-                            title: "Script",
-                            level: "verbose"
-                     } );
+                     await this.sourceProvider.load();
               }
+       }
+       /**
+        * Returns the source from the configured @see IScriptSourceProvider
+        * 
+        * @public
+        * @returns {Buffer}
+        */
+       public source(): Buffer | undefined
+       {
+              if ( this._ready === false )
+              {
+                     return void 0;
+              }
+
+              return this.sourceProvider.source();
        }
 }
