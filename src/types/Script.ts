@@ -34,6 +34,19 @@ export enum ScriptShell
 };
 
 /**
+ * @see Script operating states
+ * 
+ * @public
+ */
+export enum ScriptState
+{
+       DOWN,
+       UP,
+       ALARM,
+       ERROR,
+};
+
+/**
  * Core script interface options
  * 
  * @public
@@ -72,12 +85,28 @@ export type Script = {
        file: string;
 
        /**
-        * Root directory which contains the @see path
+        * Root directory which contains the @see this.path & assets
         * 
         * @public
         * @type {String}
         */
        root: string;
+
+       /**
+        * Script operating state enumeration 
+        * 
+        * @public
+        * @type {ScriptState}
+        */
+       state?: ScriptState;
+
+       /**
+        * Script custom status message
+        * 
+        * @public
+        * @type {String}
+        */
+       status?: string;
 
        /**
         * Flag to allow for automatic code injection from the core API @see HttpScriptService
