@@ -24,11 +24,10 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { injectConfigurationService } from '../../global/injector/ConfigurationProvider';
 import { injectHyperOptions } from '../../global/injector/HyperExpressOptions';
 import { injectRouterOutlets } from '../../global/injector/RouterOutlets';
-import { injectLogProvider } from '../../global/injector/LogProvider';
 import { ScriptModule } from '../script/script.module';
+import { CoreModule } from './core.module';
 import { Module } from '@nestjs/common';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -39,12 +38,10 @@ import { Module } from '@nestjs/common';
  * @public
  */
 @Module( {
-       imports: [ ScriptModule ],
+       imports: [ CoreModule, ScriptModule ],
        providers: [
-              injectConfigurationService(),
               injectRouterOutlets(),
               injectHyperOptions(),
-              injectLogProvider()
        ],
 } )
 export class AppModule { }
