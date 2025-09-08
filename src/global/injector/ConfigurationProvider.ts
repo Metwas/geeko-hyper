@@ -44,7 +44,7 @@ export const injectConfigurationService = (): Provider<ConfigurationService> =>
               useFactory: async ( logger: LogService ): Promise<ConfigurationService> =>
               {
                      const provider: ConfigurationService = new ConfigurationService( new FileProvider( {
-                            path: "./app-config.json",
+                            path: "./app.config.json",
                             fragment: false,
                             logger: logger
                      } ) );
