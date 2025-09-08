@@ -127,7 +127,7 @@ export class ScriptCollection extends Collection<Script, string>
                             /** ensure @see path is absolute */
                             if ( isAbsolute( path ) === false )
                             {
-                                   path = resolve( __dirname, "./" + path );
+                                   path = resolve( process.cwd(), path );
                             }
 
                             path = directory( path, { skipIfDirectory: true } );
