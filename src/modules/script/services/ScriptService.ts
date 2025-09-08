@@ -24,8 +24,11 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { SCRIPT_COLLECTOR_TOKEN, SCRIPT_STREAM_TOKEN } from "../../../global/injector/script.tokens";
+import { GLOBAL_LOG_PROVIDER } from "../../../global/injector/inject.tokens";
 import { ScriptStreamService } from "./ScriptStreamService";
 import { ScriptCollection } from "./ScriptCollection";
+import { Inject, Injectable } from "@nestjs/common";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -35,6 +38,7 @@ import { LogService } from "@geeko/log";
  * 
  * @public
  */
+@Injectable()
 export class ScriptService
 {
        /**
@@ -43,5 +47,5 @@ export class ScriptService
         * @param {ScriptCollection} scripts
         * @param {LogService} logger 
         */
-       public constructor( public readonly stream: ScriptStreamService, public readonly scripts: ScriptCollection, private logger?: LogService ) { }
+       public constructor( @Inject( SCRIPT_STREAM_TOKEN ) public readonly stream: ScriptStreamService, @Inject( SCRIPT_COLLECTOR_TOKEN ) public readonly scripts: ScriptCollection, @Inject( GLOBAL_LOG_PROVIDER ) private logger?: LogService ) { }
 }
