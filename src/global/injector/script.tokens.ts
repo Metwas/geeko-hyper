@@ -55,6 +55,46 @@ export const HTTP_REGEX_PATH: RegExp = /^https?:\/\//i;
 export const SOURCE_AUTH_TOKEN: string = "SOURCE_AUTH_TOKEN";
 
 /**
+ * @see ScriptStreamService injector token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_STREAM_TOKEN: string = "SCRIPT_STREAM_TOKEN";
+
+/**
+ * @see ScriptCollection injector token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_COLLECTOR_TOKEN: string = "SCRIPT_COLLECTOR_TOKEN";
+
+/**
+ * Script focused @see FsDetector injector token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_WATCH_SERVICE: string = "SCRIPT_WATCH_SERVICE";
+
+/**
+ * Script @see IScriptSourceProvider injector token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_SOURCE_PROVIDER: string = "SCRIPT_SOURCE_PROVIDER";
+
+/**
+ * @see ScriptInjectorService injector token
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_INJECTOR_TOKEN: string = "SCRIPT_INJECTOR_TOKEN";
+
+/**
  * Github release asset tag
  * 
  * @public
@@ -77,3 +117,11 @@ export const SCRIPT_REPLACE_TAG: string = "${{}}$";
  * @type {String}
  */
 export const SCRIPT_TAG_WRAPPER: string = `<script type="text/javascript" defer>${SCRIPT_REPLACE_TAG}</script>`;
+
+/**
+ * Script configuration key
+ * 
+ * @public
+ * @type {String}
+ */
+export const SCRIPT_CONFIGURATION_KEY: string = "scripts";
