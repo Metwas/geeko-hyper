@@ -103,7 +103,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
                      /** Finally listen on the configured port & host */
                      await this._server?.listen( port, host, () =>
                      {
-                            this.log.verbose( `HTTP server now listening on [port] ${port} [host] ${host}` );
+                            this.log.info( `HTTP server now listening on [port] ${port} [host] ${host}` );
                      } );
 
                      if ( typeof callback === "function" )
