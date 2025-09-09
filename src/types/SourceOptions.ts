@@ -61,10 +61,10 @@ export type SourceOptions = {
        token?: string;
 
        /**
-        * The source local or remote path
+        * The source local or remote url
         * 
         * @public
         * @type {String}
         */
-       path: string;
+       url: string;
 };
