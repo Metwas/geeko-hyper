@@ -46,7 +46,7 @@ export const injectScriptSourceProvider = (): Provider<IScriptSourceProvider> =>
               provide: SCRIPT_SOURCE_PROVIDER,
               useFactory: async ( configuration: ConfigurationService, logger: LogService ): Promise<IScriptSourceProvider> =>
               {
-                     return new DefaultSourceProvider( configuration, logger );
+                     return new DefaultSourceProvider( configuration, logger.branch( "Injector" ) );
               },
               inject: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER ]
        };
