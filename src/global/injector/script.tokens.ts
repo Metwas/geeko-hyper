@@ -125,3 +125,11 @@ export const SCRIPT_TAG_WRAPPER: string = `<script type="text/javascript" defer>
  * @type {String}
  */
 export const SCRIPT_CONFIGURATION_KEY: string = "scripts";
+
+/**
+ * Script injector configuration key
+ * 
+ * @public
+ * @type {String}
+ */
+export const INJECTOR_CONFIGURATION_KEY: string = "scripts/injector";

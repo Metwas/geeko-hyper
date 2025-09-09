@@ -24,11 +24,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { GIT_RELEASE_TAG, HTTP_REGEX_PATH, SCRIPT_REPLACE_TAG, SCRIPT_TAG_WRAPPER, SOURCE_AUTH_TOKEN } from "../../../global/injector/script.tokens";
+import { HTTP_REGEX_PATH, SCRIPT_REPLACE_TAG, SCRIPT_TAG_WRAPPER, SOURCE_AUTH_TOKEN, INJECTOR_CONFIGURATION_KEY } from "../../../global/injector/script.tokens";
+import { GithubReleaseOptions } from "../../../types/GithubReleaseOptions";
 import { IScriptSourceProvider } from "./IScriptSourceProvider";
 import { SourceOptions } from "../../../types/SourceOptions";
 import { ConfigurationService } from "@geeko/configuration";
 import { decompress } from "../../../tools/stream";
+import { getRelease } from "../../../tools/github";
 import { isAbsolute, resolve } from "node:path";
 import { JsonLike } from "@geeko/serialization";
 import { readFileData } from "@geeko/os";
@@ -44,7 +46,6 @@ import { LogService } from "@geeko/log";
 export class DefaultSourceProvider implements IScriptSourceProvider
 {
        /**
-        * 
         * @public
         * @param {ConfigurationService} configuration
         * @param {LogService} log 
@@ -69,15 +70,22 @@ export class DefaultSourceProvider implements IScriptSourceProvider
        {
               try
               {
-                     const options: SourceOptions = await this.configuration?.get( "injector" );
-                     let path: string = options?.path;
+                     const options: SourceOptions = await this.configuration?.get( INJECTOR_CONFIGURATION_KEY );
+                     let path: string = options?.url;
 
                      if ( path )
                      {
-                            const token: string = options?.token ?? await this.configuration.get( SOURCE_AUTH_TOKEN, { env: true } ) ?? "";
+                            const token: string = options?.token ?? await this.configuration.get( SOURCE_AUTH_TOKEN, {
+                                   env: true
+                            } ) ?? "";
+
+                            this.log?.debug( `Using authentication token [${token}]` );
+
                             /** Validate if local or remote path */
                             if ( HTTP_REGEX_PATH.test( path ) )
                             {
+                                   this.log?.verbose( `Fetching HTTP source [${path}]` );
+
                                    const response: Response = await fetch( path, {
                                           method: 'GET',
                                           headers: token ? {
@@ -87,47 +95,23 @@ export class DefaultSourceProvider implements IScriptSourceProvider
 
                                    if ( response.ok === false )
                                    {
-                                          this.log?.error( `Source fetch error: [${response.statusText}]` );
+                                          this.log?.error( `Source fetch error: [${response.statusText}] path [${path}]` );
                                    }
                                    else
                                    {
                                           if ( options?.method === "github" )
                                           {
-                                                 this.log?.verbose( `Fetching github source` );
                                                  /** Github path will return a @see json object containing the releases */
-                                                 const releases: JsonLike = await response.json();
-                                                 const assets: Array<any> = releases?.data?.assets;
+                                                 let releases: Array<JsonLike> = await response.json();
 
-                                                 const length: number = assets?.length ?? 0;
-                                                 let index: number = 0;
+                                                 releases = Array.isArray( releases ) ? releases : [ releases ];
+                                                 const release: GithubReleaseOptions | undefined = getRelease( options?.version ?? "latest", releases );
 
-                                                 if ( length === 0 )
+                                                 if ( release?.url )
                                                  {
-                                                        this.log?.error( `Github path [${path}] returned no asset releases` );
-                                                        return void 0;
-                                                 }
+                                                        this.log?.verbose( `Fetching github source [${release?.url}]` );
 
-                                                 let releasePath: string | undefined = void 0;
-
-                                                 for ( ; index < length; ++index )
-                                                 {
-                                                        const asset: any = assets[ index ];
-
-                                                        if ( asset?.url && asset?.name )
-                                                        {
-                                                               const match: Array<string> = asset.name.match( GIT_RELEASE_TAG );
-
-                                                               if ( match?.length > 0 )
-                                                               {
-                                                                      releasePath = asset.url;
-                                                                      break;
-                                                               }
-                                                        }
-                                                 }
-
-                                                 if ( releasePath )
-                                                 {
-                                                        const response: Response = await fetch( path, {
+                                                        const response: Response = await fetch( release?.url, {
                                                                method: 'GET',
                                                                headers: token ? {
                                                                       'Authorization': `Token ${token}`,
@@ -137,13 +121,15 @@ export class DefaultSourceProvider implements IScriptSourceProvider
                                                         } );
 
                                                         const buffer: Buffer = Buffer.from( await response.arrayBuffer() );
+
+                                                        this.log?.debug( `Got release source buffer [${buffer.length}]` );
                                                         /** This would be compressed, therefore use @see gunzip to deflate */
-                                                        this._buffer = this.normalize( await decompress( buffer ), options?.wrap );
+                                                        this._buffer = this.normalize( release.compressed ? await decompress( buffer ) : buffer, options?.wrap );
                                                  }
                                           }
                                           else
                                           {
-                                                 this.log?.verbose( `Fetching HTTP source` );
+                                                 this.log?.verbose( `Parsing HTTP source` );
                                                  this._buffer = this.normalize( Buffer.from( await response.arrayBuffer() ), options?.wrap );
                                           }
                                    }
