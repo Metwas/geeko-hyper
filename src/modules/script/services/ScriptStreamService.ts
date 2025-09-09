@@ -24,6 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { ScriptInjectorService } from "./ScriptInjectorService";
+import { Request, Response } from "hyper-express";
+import { Script } from "../../../types/Script";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -37,10 +40,10 @@ export class ScriptStreamService
 {
        /**
         * @public
-        * @param {ScriptCollection} scripts 
+        * @param {ScriptInjectorService} injector
         * @param {LogService} logger 
         */
-       public constructor( private logger?: LogService )
+       public constructor( private injector: ScriptInjectorService, private logger?: LogService )
        {
               if ( !logger )
               {
@@ -49,5 +52,11 @@ export class ScriptStreamService
                             level: "verbose"
                      } );
               }
+       }
+
+       public async stream( script: Script, request: Request, response: Response ): Promise<void>
+       {
+              const buffer = this.injector.source();
+
        }
 }
