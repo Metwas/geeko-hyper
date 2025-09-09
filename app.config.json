@@ -4,6 +4,12 @@
               "port": 3333
        },
        "scripts": {
-              "path": "./assets/common/scripts"
+              "path": "./assets/common/scripts",
+              "injector": {
+                     "url": "https://api.github.com/repos/Metwas/geeko-chloro/releases",
+                     "version": "latest",
+                     "method": "github",
+                     "wrap": true
+              }
        }
 }
