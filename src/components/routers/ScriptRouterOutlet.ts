@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { ScriptService } from "../../modules/script/services/ScriptService";
 import { Get, Post, Delete } from "../decorators/RESTful";
 import { RouteOutlet } from "../decorators/RouteOutlet";
 import { Request, Response } from "hyper-express";
@@ -42,7 +43,7 @@ export class ScriptRouterOutlet extends RouterOutlet
         * @public
         * @param {ScriptService} scriptService 
         */
-       public constructor( public scriptService?: any )
+       public constructor( public scriptService: ScriptService )
        {
               super();
 
@@ -62,6 +63,14 @@ export class ScriptRouterOutlet extends RouterOutlet
        @Get( "/" )
        public async get( request: Request, response: Response ): Promise<any>
        {
+              const query: JsonLike = request.query;
+              const id: string = query?.id;
+
+              if ( id )
+              {
+                     await this.scriptService.interceptStream( id, request, response );
+              }
+
               return void 0;
        }
 }

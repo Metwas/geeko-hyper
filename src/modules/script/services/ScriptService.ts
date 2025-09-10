@@ -29,6 +29,8 @@ import { GLOBAL_LOG_PROVIDER } from "../../../global/injector/inject.tokens";
 import { ScriptStreamService } from "./ScriptStreamService";
 import { ScriptCollection } from "./ScriptCollection";
 import { Inject, Injectable } from "@nestjs/common";
+import { Request, Response } from "hyper-express";
+import { Script } from "../../../types/Script";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -48,4 +50,35 @@ export class ScriptService
         * @param {LogService} logger 
         */
        public constructor( @Inject( SCRIPT_STREAM_TOKEN ) public readonly stream: ScriptStreamService, @Inject( SCRIPT_COLLECTOR_TOKEN ) public readonly scripts: ScriptCollection, @Inject( GLOBAL_LOG_PROVIDER ) private logger?: LogService ) { }
+
+       /**
+        * Gets the specific @see Script by id
+        * 
+        * @public
+        * @param {String} id 
+        * @returns {Script}
+        */
+       public get( id: string ): Script | undefined
+       {
+              return this.scripts.get( id );
+       }
+
+       /**
+        * Streams the specified script on the given @see Response - this will intercept the stream and inject the @see ScriptStreamService.source
+        * 
+        * @public
+        * @param {String} id 
+        * @param {Request} request 
+        * @param {Response} response
+        * @returns {Promise<void>} 
+        */
+       public async interceptStream( id: string, request: Request, response: Response ): Promise<void>
+       {
+              const script: Script | undefined = this.scripts.get( id );
+
+              if ( script )
+              {
+                     await this.stream.stream( script, request, response );
+              }
+       }
 }
