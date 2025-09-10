@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ScriptInjectorService } from "./ScriptInjectorService";
+import { ReadStream, createReadStream } from "node:fs";
 import { Request, Response } from "hyper-express";
 import { Script } from "../../../types/Script";
 import { LogService } from "@geeko/log";
@@ -49,14 +50,16 @@ export class ScriptStreamService
               {
                      this.logger = new LogService( {
                             title: "Script",
-                            level: "verbose"
+                            level: "info"
                      } );
               }
        }
 
        public async stream( script: Script, request: Request, response: Response ): Promise<void>
        {
-              const buffer = this.injector.source();
+              const buffer: Buffer | undefined = this.injector.source();
+              const fsStream: ReadStream = createReadStream( script.file );
 
+              return response.stream( fsStream );
        }
 }
