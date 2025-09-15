@@ -25,11 +25,11 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { HTTP_REGEX_PATH, SCRIPT_REPLACE_TAG, SCRIPT_TAG_WRAPPER, SOURCE_AUTH_TOKEN, INJECTOR_CONFIGURATION_KEY } from "../../../global/injector/script.tokens";
+import { INJECTABLE_NEEDLE_BUFFER, decompress } from "../../../tools/stream";
 import { GithubReleaseOptions } from "../../../types/GithubReleaseOptions";
 import { IScriptSourceProvider } from "./IScriptSourceProvider";
 import { SourceOptions } from "../../../types/SourceOptions";
 import { ConfigurationService } from "@geeko/configuration";
-import { decompress } from "../../../tools/stream";
 import { getRelease } from "../../../tools/github";
 import { isAbsolute, resolve } from "node:path";
 import { JsonLike } from "@geeko/serialization";
@@ -172,6 +172,17 @@ export class DefaultSourceProvider implements IScriptSourceProvider
        public source(): Buffer | undefined
        {
               return this._buffer;
+       }
+
+       /**
+        * Returns the @see source replacer/needle. Defaults to @see INJECTABLE_NEEDLE_BUFFER
+        * 
+        * @public
+        * @returns {Buffer}
+        */
+       public needle(): Buffer | Array<Buffer> | undefined
+       {
+              return INJECTABLE_NEEDLE_BUFFER[ 1 ];
        }
 
        /**
