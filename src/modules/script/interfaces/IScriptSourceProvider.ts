@@ -44,4 +44,12 @@ export interface IScriptSourceProvider
         * @returns {Buffer}  
         */
        source(): Buffer | undefined;
+
+       /**
+        * Returns the @see source replacer/needle
+        * 
+        * @public
+        * @returns {Buffer}
+        */
+       needle(): Buffer | Array<Buffer> | undefined;
 }
