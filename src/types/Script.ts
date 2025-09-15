@@ -22,6 +22,12 @@
      SOFTWARE.
 */
 
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+import { InjectOptions } from "./InjectOptions";
+
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
 /**
  * Possible @see Script shell or bootstrap types
  * 
@@ -85,6 +91,14 @@ export type Script = {
        file: string;
 
        /**
+        * Absolute path to the @see Script.file
+        * 
+        * @public
+        * @type {String}
+        */
+       path?: string;
+
+       /**
         * Root directory which contains the @see this.path & assets
         * 
         * @public
@@ -114,13 +128,5 @@ export type Script = {
         * @public
         * @type {Boolean} 
         */
-       inject?: boolean;
-
-       /**
-        * Injector token if @see inject has been enabled
-        * 
-        * @public
-        * @type {String}
-        */
-       injectToken?: string;
+       inject?: boolean | InjectOptions;
 };
