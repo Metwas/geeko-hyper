@@ -29,7 +29,7 @@ import { SCRIPT_ENTRY_NAME, SCRIPT_MANIFEST } from "../../../global/injector/scr
 import { Script, ScriptShell } from "../../../types/Script";
 import { getFilesInDirectory } from "@geeko/configuration";
 import { getScriptShellType } from "../../../tools/script";
-import { isAbsolute, resolve, sep } from "node:path";
+import { isAbsolute, join, resolve, sep } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 import { Collection } from "@geeko/core";
 import { LogService } from "@geeko/log";
@@ -199,11 +199,14 @@ export class ScriptCollection extends Collection<Script, string>
 
                                    /** Determine the @see ScriptShell from the extension type */
                                    const shell: ScriptShell = getScriptShellType( rootPath );
+                                   const fileName: string = filename( main );
+                                   const path: string = join( fileDirectory, fileName );
 
                                    const script: Script = {
-                                          file: filename( main ),
                                           root: fileDirectory,
+                                          file: fileName,
                                           shell: shell,
+                                          path: path,
                                           id: name,
                                    };
 
