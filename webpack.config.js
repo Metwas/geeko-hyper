@@ -1,11 +1,9 @@
-// webpack.config.js
-const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
 
 module.exports = {
        entry: './src/main.ts',
        target: 'node',
-       // ❌ remove externals: [nodeExternals()] to include node_modules
        mode: 'production',
        output: {
               path: path.resolve(__dirname, 'dist'),
@@ -23,7 +21,7 @@ module.exports = {
                      },
                      {
                             test: /\.node$/,
-                            loader: 'node-loader',   // 👈 handles native addons
+                            loader: 'node-loader',
                      },
               ],
        },
