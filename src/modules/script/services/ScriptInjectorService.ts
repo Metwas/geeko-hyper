@@ -46,14 +46,6 @@ export class ScriptInjectorService
        }
 
        /**
-        * Ready state for loading the source provider 
-        * 
-        * @private
-        * @type {Boolean}
-        */
-       private _ready: boolean = false;
-
-       /**
         * Loads the source from the provided @see IScriptSourceProvider
         * 
         * @public
@@ -66,6 +58,7 @@ export class ScriptInjectorService
                      await this.sourceProvider.load();
               }
        }
+
        /**
         * Returns the source from the configured @see IScriptSourceProvider
         * 
@@ -74,11 +67,17 @@ export class ScriptInjectorService
         */
        public source(): Buffer | undefined
        {
-              if ( this._ready === false )
-              {
-                     return void 0;
-              }
-
               return this.sourceProvider.source();
+       }
+
+       /**
+        * Returns the @see source replacer/needle
+        * 
+        * @public
+        * @returns {Buffer}
+        */
+       public needle(): Buffer | Array<Buffer> | undefined
+       {
+              return this.sourceProvider.needle();
        }
 }
