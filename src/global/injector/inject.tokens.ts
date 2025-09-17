@@ -93,3 +93,11 @@ export const ROUTE_DELETE_TOKEN: string = "ROUTE_DELETE_TOKEN";
  * @type {String}
  */
 export const ROUTE_WS_TOKEN: string = "ROUTE_WS_TOKEN";
+
+/**
+ * @see Registry injection token
+ * 
+ * @public
+ * @type {String}
+ */
+export const GLOBAL_REGISTRY_TOKEN: string = "GLOBAL_REGISTRY_TOKEN";

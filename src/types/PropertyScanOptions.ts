@@ -22,29 +22,29 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN } from '../../global/injector/inject.tokens';
-import { injectConfigurationService } from '../../global/injector/ConfigurationProvider';
-import { injectLogProvider } from '../../global/injector/LogProvider';
-import { injectRegistry } from '../../global/injector/Registry';
-import { DiscoveryModule } from '@nestjs/core';
-import { Module } from '@nestjs/common';
-
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+export type PropertyMetadata = { property: unknown; instance: unknown; };
+export type PropertyScanCallback = ( token: ProviderToken, metadata: PropertyMetadata ) => void;
+export type ProviderToken = string | symbol;
 
 /**
- * Global core module context
+ * Property metadata factory options
  * 
  * @public
  */
-@Module( {
-       exports: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN ],
-       imports: [ DiscoveryModule ],
-       providers: [
-              injectConfigurationService(),
-              injectLogProvider(),
-              injectRegistry()
-       ],
-} )
-export class CoreModule { }
+export type ProviderPropertyMetadata = {
+       /**
+        * Metadata scanner factory
+        * 
+        * @public
+        * @param {String} key 
+        */
+       scan( key: ProviderToken ): any;
+
+       /**
+        * Provider property reference
+        * 
+        * @public
+        * @type {Object | Function}
+        */
+       property: unknown;
+};

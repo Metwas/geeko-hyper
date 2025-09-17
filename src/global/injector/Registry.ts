@@ -24,27 +24,27 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN } from '../../global/injector/inject.tokens';
-import { injectConfigurationService } from '../../global/injector/ConfigurationProvider';
-import { injectLogProvider } from '../../global/injector/LogProvider';
-import { injectRegistry } from '../../global/injector/Registry';
-import { DiscoveryModule } from '@nestjs/core';
-import { Module } from '@nestjs/common';
+import { DiscoveryService, MetadataScanner } from "@nestjs/core";
+import { Registry } from "../../components/reflect/Registry";
+import { GLOBAL_REGISTRY_TOKEN } from "./inject.tokens";
+import { Provider } from "@nestjs/common";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Global core module context
+ * Injects an instance of @see Registry
  * 
  * @public
+ * @returns {Provider<Registry>}
  */
-@Module( {
-       exports: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN ],
-       imports: [ DiscoveryModule ],
-       providers: [
-              injectConfigurationService(),
-              injectLogProvider(),
-              injectRegistry()
-       ],
-} )
-export class CoreModule { }
+export const injectRegistry = (): Provider<Registry> =>
+{
+       return {
+              provide: GLOBAL_REGISTRY_TOKEN,
+              useFactory: ( discovery: DiscoveryService, scanner: MetadataScanner ): Registry =>
+              {
+                     return new Registry( discovery, scanner );
+              },
+              inject: [ DiscoveryService, MetadataScanner ]
+       };
+};
