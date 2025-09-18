@@ -70,7 +70,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
        {
               try
               {
-                     const options: ConnectionOptions = await this.configuration.get( { key: "hyper" } );
+                     const options: ConnectionOptions = await this.configuration.get( "hyper" );
 
                      const host: string = options?.host ?? "127.0.0.1";
                      const port: number = Number( options?.port ?? await this.configuration.get( "GEEKO_HTTP_PORT", {
@@ -135,9 +135,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
         * @param {String} event
         * @param {Function} callback
         */
-       public on( event: string, callback: Function )
-       {
-       }
+       public on( event: string, callback: Function ) { }
 
        /**
         * Returns the underlying @see HyperExpressServer reference
