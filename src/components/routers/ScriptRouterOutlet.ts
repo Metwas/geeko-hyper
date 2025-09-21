@@ -24,8 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { IFRAME_URL_REGEX, SCRIPT_ID_REGEX, GLOBAL_SCRIPTS_URI } from "../../global/scripts/paths";
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
-import { IFRAME_URL_REGEX, SCRIPT_ID_REGEX } from "../../global/scripts/paths";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { Get, Post, Delete } from "../decorators/RESTful";
 import { RouteOutlet } from "../decorators/RouteOutlet";
@@ -42,7 +42,7 @@ import mime from "mime-types";
 /**
  * @public
  */
-@RouteOutlet( "scripts" )
+@RouteOutlet( GLOBAL_SCRIPTS_URI )
 export class ScriptRouterOutlet extends RouterOutlet
 {
        /**
@@ -56,54 +56,61 @@ export class ScriptRouterOutlet extends RouterOutlet
               this.addRoute( {
                      path: "/*",
                      method: "GET",
-                     handler: async ( request: Request, response: Response ): Promise<void> =>
-                     {
-                            const query: JsonLike = request.query;
-
-                            let id: string | undefined = query?.id;
-                            let url: string = request.url;
-
-                            let resourceRequest: boolean = false;
-
-                            if ( !id )
-                            {
-                                   /** if no id was provided, check the @see referer header */
-                                   const referer: string = request.headers[ "referer" ] ?? url;
-                                   id = extractKeyFromUrl( referer, "?id" );
-
-                                   resourceRequest = true;
-                            }
-
-                            /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
-                            url = url.replace( IFRAME_URL_REGEX, "" ).replace( SCRIPT_ID_REGEX, "" );
-
-                            if ( id )
-                            {
-                                   const streamer: ScriptStreamService = this.scriptService.stream;
-                                   const script: Script | undefined = this.scriptService.get( id );
-
-                                   if ( !script )
-                                   {
-                                          return await streamer.notFound( request, response );
-                                   }
-
-                                   let path: string = script.path ?? join( script.root, script.file );
-
-                                   if ( resourceRequest )
-                                   {
-                                          path = join( script.root, ( resourceRequest ? url : script.file ) );
-                                          response.header( "Content-Type", ( mime.lookup( url ) || "application/octet-stream" ) );
-                                   }
-
-                                   return await streamer.stream( path, script, request, response, !resourceRequest );
-                            }
-                     }
+                     handler: this.get.bind( this )
               } );
        }
 
-       @Get( "/" )
-       public async get( request: Request, response: Response ): Promise<any>
+       /**
+        * Streams the specified @see Script by id
+        * 
+        * @public
+        * @param {Request} request 
+        * @param {Response} response 
+        * @returns {Promise<void>}
+        */
+       @Get( "/*" )
+       public async get( request: Request, response: Response ): Promise<void>
        {
+              const query: JsonLike = request.query;
+
+              let id: string | undefined = query?.id;
+              let url: string = request.url;
+
+              let resourceRequest: boolean = false;
+
+              if ( !id )
+              {
+                     /** if no id was provided, check the @see referer header */
+                     const referer: string = request.headers[ "referer" ] ?? url;
+                     id = extractKeyFromUrl( referer, "?id" );
+
+                     resourceRequest = true;
+              }
+
+              /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
+              url = url.replace( IFRAME_URL_REGEX, "" ).replace( SCRIPT_ID_REGEX, "" );
+
+              if ( id )
+              {
+                     const streamer: ScriptStreamService = this.scriptService.stream;
+                     const script: Script | undefined = this.scriptService.get( id );
+
+                     if ( !script )
+                     {
+                            return await streamer.notFound( request, response );
+                     }
+
+                     let path: string = script.path ?? join( script.root, script.file );
+
+                     if ( resourceRequest )
+                     {
+                            path = join( script.root, ( resourceRequest ? url : script.file ) );
+                            response.header( "Content-Type", ( mime.lookup( url ) || "application/octet-stream" ) );
+                     }
+
+                     return await streamer.stream( path, script, request, response, !resourceRequest );
+              }
+
               return void 0;
        }
 }
