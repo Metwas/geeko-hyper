@@ -29,7 +29,6 @@ import { ProviderPropertyMetadata } from "../../types/PropertyScanOptions";
 import { DefaultPropertyMetadataScanner } from "./DefaultPropertyScanner";
 import { InstanceWrapper } from "@nestjs/core/injector/instance-wrapper";
 import { ProviderWrapper } from "../../types/ProviderWrapper";
-import { isNullOrUndefined } from "@aralia/utils";
 import { Injectable } from "@nestjs/common";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -61,7 +60,7 @@ export class Registry
         * Provider lookup table
         * 
         * @private
-        * @type {Map<string | symbol, ProviderWrapper}
+        * @type {Map<string | symbol, ProviderWrapper>}
         */
        private _providers: Map<string | symbol, ProviderWrapper> = new Map();
 
@@ -136,7 +135,7 @@ export class Registry
         */
        private _add( options: { name: string, instance: any, properties: Array<ProviderPropertyMetadata> } ): void
        {
-              if ( typeof options?.[ "name" ] !== "string" || isNullOrUndefined( options[ "instance" ] ) === true )
+              if ( typeof options?.[ "name" ] !== "string" || !options[ "instance" ] )
               {
                      return void 0;
               }
