@@ -22,22 +22,38 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { Request, Response } from "hyper-express";
-import { Script } from "./Script";
+import { ProviderPropertyMetadata } from "../../types/PropertyScanOptions";
+import { Reflector } from "@nestjs/core";
+import { Type } from "@nestjs/common";
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see Script streaming options
+ * Default @see Reflector based metadata scanner
  * 
  * @public
  */
-export type StreamOptions = {
-       inject?: boolean;
-       response: Response;
-       request: Request;
-       script: Script;
-       path: string;
+export class DefaultPropertyMetadataScanner implements ProviderPropertyMetadata
+{
+       /**
+        * Provide a property object reference
+        * 
+        * @public
+        * @param {Object} property 
+        */
+       public constructor( public readonly property: Type<any>, public reflector: Reflector = new Reflector() ) { }
+
+       /**
+        * Reflects any metadata stored against the provided @see String key
+        * 
+        * @public
+        * @param {String} key 
+        * @returns {Object}
+        */
+       public scan( key: string | symbol ): any
+       {
+              return this.reflector.get( key, this.property );
+       }
 };

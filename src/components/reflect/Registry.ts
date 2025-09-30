@@ -24,10 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { DiscoveryService, MetadataScanner, Reflector } from "@nestjs/core";
 import { ProviderPropertyMetadata } from "../../types/PropertyScanOptions";
-import { DefaultPropertyMetadataScanner } from "./DefaultPropertyScanner";
-import { InstanceWrapper } from "@nestjs/core/injector/instance-wrapper";
 import { ProviderWrapper } from "../../types/ProviderWrapper";
 import { Injectable } from "@nestjs/common";
 
@@ -47,14 +44,7 @@ export class Registry
         * @public
         * @param {DiscoveryService} discoveryService 
         */
-       public constructor( protected discoveryService: DiscoveryService, protected metadataScanner: MetadataScanner ) { }
-
-       /**
-        * NestJS reflector reference
-        * 
-        * @private
-        */
-       private _reflector = new Reflector();
+       public constructor() { }
 
        /**
         * Provider lookup table
@@ -71,7 +61,7 @@ export class Registry
         */
        public initialize(): void
        {
-              this.scan( this.discoveryService.getProviders() );
+
        }
 
        /**
@@ -84,47 +74,6 @@ export class Registry
        public getProviders<T extends Array<ProviderWrapper>>( key?: string | symbol ): T
        {
               return ( ( key ? this._providers[ key ] : this._flatten() ) || [] ) as T;
-       }
-
-       /**
-        * Scans for all providers instantiated within this application
-        * 
-        * @private
-        * @param {Array<InstanceWrapper>} instanceWrappers 
-        */
-       public scan( instanceWrappers: Array<InstanceWrapper> ): void
-       {
-              const length: number = Array.isArray( instanceWrappers ) ? instanceWrappers.length : 0;
-              let index: number = 0;
-
-              for ( ; index < length; ++index )
-              {
-                     const { instance, name } = instanceWrappers[ index ];
-
-                     if ( !instance )
-                     {
-                            continue;
-                     }
-
-                     let properties: Array<ProviderPropertyMetadata> = [];
-
-                     this.metadataScanner.scanFromPrototype( instance, Object.getPrototypeOf( instance ), ( name: any ) =>
-                     {
-                            if ( instance[ name ] )
-                            {
-                                   properties.push( new DefaultPropertyMetadataScanner( instance[ name ], this._reflector ) );
-                            }
-                     } );
-
-                     if ( this._providers.has( name ) === false )
-                     {
-                            this._add( {
-                                   name,
-                                   instance,
-                                   properties
-                            } );
-                     }
-              }
        }
 
        /**

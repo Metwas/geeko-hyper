@@ -27,9 +27,9 @@
 import { FILE_CHANGE_EVENT, FILE_CREATE_EVENT, FILE_DELETE_EVENT, FileFragment, FileInfo, FileValidator, FsDetector, directory, extension, filename } from "@geeko/os";
 import { SCRIPT_ENTRY_NAME, SCRIPT_MANIFEST } from "../../../global/injector/script.tokens";
 import { Script, ScriptShell } from "../../../types/Script";
+import { isAbsolute, join, resolve, sep } from "node:path";
 import { getFilesInDirectory } from "@geeko/configuration";
 import { getScriptShellType } from "../../../tools/script";
-import { isAbsolute, join, resolve, sep } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 import { Collection } from "@geeko/core";
 import { LogService } from "@geeko/log";
@@ -262,7 +262,7 @@ export class ScriptCollection extends Collection<Script, string>
               {
                      if ( typeof file?.path === "string" )
                      {
-                            const relativePath: string = file.relativePath;
+                            const relativePath: string = file.path;
                             const name: string = file.name;
                             const type: string = file.type;
 
@@ -310,11 +310,11 @@ export class ScriptCollection extends Collection<Script, string>
        {
               try
               {
-                     if ( typeof file?.[ "path" ] === "string" )
+                     if ( typeof file?.path === "string" )
                      {
-                            const relativePath: string = file[ "relativePath" ];
-                            const name: string = file[ "name" ];
-                            const type: string = file[ "type" ];
+                            const relativePath: string = file.path;
+                            const name: string = file.name;
+                            const type: string = file.type;
 
                             /** if @see directory and not relative, attempt to load manifest */
                             if ( type === "directory" && ( !relativePath || relativePath === name ) )
@@ -323,6 +323,7 @@ export class ScriptCollection extends Collection<Script, string>
 
                                    if ( script )
                                    {
+                                          this.log?.debug( `Removing script [${script.id}]` );
                                           this.emit( "stop", script );
                                           this.delete( name );
                                    }
@@ -331,10 +332,11 @@ export class ScriptCollection extends Collection<Script, string>
                             }
 
                             const relativeName: string = relativePath.split( sep )[ 0 ];
-                            const script: Script = this.get( relativeName );
+                            const script: Script = this.get( name );
 
                             if ( script )
                             {
+                                   this.log?.debug( `Reloading script [${script.id}]` );
                                    /** Trigger an update on the @see Script */
                                    this.emit( "reload", script );
                             }

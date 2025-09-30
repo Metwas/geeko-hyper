@@ -24,11 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN } from '../../global/injector/inject.tokens';
+import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from '../../global/injector/inject.tokens';
 import { injectConfigurationService } from '../../global/injector/ConfigurationProvider';
 import { injectLogProvider } from '../../global/injector/LogProvider';
-import { injectRegistry } from '../../global/injector/Registry';
-import { DiscoveryModule } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -39,12 +37,10 @@ import { Module } from '@nestjs/common';
  * @public
  */
 @Module( {
-       exports: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN ],
-       imports: [ DiscoveryModule ],
+       exports: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER ],
        providers: [
               injectConfigurationService(),
               injectLogProvider(),
-              injectRegistry()
        ],
 } )
 export class CoreModule { }

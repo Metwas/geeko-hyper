@@ -182,7 +182,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
         */
        public needle(): Buffer | Array<Buffer> | undefined
        {
-              return INJECTABLE_NEEDLE_BUFFER[ 1 ];
+              return INJECTABLE_NEEDLE_BUFFER[ 0 ];
        }
 
        /**

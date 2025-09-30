@@ -25,8 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { SCRIPT_COLLECTOR_TOKEN, SCRIPT_STREAM_TOKEN } from "../../../global/injector/script.tokens";
-import { GLOBAL_LOG_PROVIDER, GLOBAL_REGISTRY_TOKEN } from "../../../global/injector/inject.tokens";
-import { Registry } from "../../../components/reflect/Registry";
+import { GLOBAL_LOG_PROVIDER } from "../../../global/injector/inject.tokens";
 import { ScriptStreamService } from "./ScriptStreamService";
 import { ScriptCollection } from "./ScriptCollection";
 import { Inject, Injectable } from "@nestjs/common";
@@ -51,9 +50,6 @@ export class ScriptService
         */
        public constructor( @Inject( SCRIPT_STREAM_TOKEN ) public readonly stream: ScriptStreamService, @Inject( SCRIPT_COLLECTOR_TOKEN ) public readonly scripts: ScriptCollection, @Inject( GLOBAL_LOG_PROVIDER ) private logger?: LogService ) { }
 
-       @Inject( GLOBAL_REGISTRY_TOKEN )
-       private _registry: Registry | undefined = void 0;
-
        /**
         * Gets the specific @see Script by id
         * 
@@ -64,15 +60,5 @@ export class ScriptService
        public get( id: string ): Script | undefined
        {
               return this.scripts.get( id );
-       }
-
-       /**
-        * On application initialization
-        * 
-        * @public
-        */
-       public onApplicationBootstrap(): void
-       {
-              this._registry?.initialize();
        }
 }

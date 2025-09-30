@@ -28,6 +28,7 @@ import { RouteOutlet } from "../decorators/RouteOutlet";
 import { Ws } from "../decorators/Websocket";
 import { Websocket } from "hyper-express";
 import { RouterOutlet } from "./Router";
+import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -45,12 +46,19 @@ export class WebSocketRouterOutlet extends RouterOutlet
        {
               super();
 
+              let logger = new LogService();
+
               this.addRoute( {
                      path: "/connect",
                      method: "WS",
                      handler: ( socket: Websocket ) =>
                      {
-                            console.log( "Websocket client connected: ", socket );
+                            logger.info( "Websocket client connected: " );
+
+                            socket.on( "message", ( message: string ) =>
+                            {
+                                   logger.info( message );
+                            } );
                      }
               } );
        }

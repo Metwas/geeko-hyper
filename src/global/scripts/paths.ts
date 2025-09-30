@@ -37,3 +37,12 @@ export const SCRIPT_ID_REGEX: RegExp = /script\/\?id=\w+|script\//g;
  * @type {RegExp}
  */
 export const IFRAME_URL_REGEX: RegExp = /\&iframe=\d+/g;
+
+/**
+ * Global default scripts uri
+ * 
+ * @public
+ * @type {String}
+ */
+export const GLOBAL_SCRIPTS_URI: string = "scripts";
+
