@@ -1,10 +1,10 @@
 {
        "hyper": {
-              "host": "127.0.0.1",
+              "host": "0.0.0.0",
               "port": 3333
        },
        "scripts": {
-              "path": "./assets/common/scripts",
+              "path": "./assets/scripts",
               "injector": {
                      "url": "https://api.github.com/repos/Metwas/geeko-chloro/releases",
                      "version": "latest",
