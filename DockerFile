@@ -1,0 +1,16 @@
+FROM node:22-slim
+
+RUN useradd -m geeko
+RUN mkdir -p /home/geeko/app && chown -R geeko:geeko /home/geeko/app
+
+USER geeko
+WORKDIR /home/geeko/app
+
+COPY --chown=geeko:geeko package*.json ./
+COPY --chown=geeko:geeko app*.json ./
+
+COPY --chown=geeko:geeko node_modules/ ./node_modules
+COPY --chown=geeko:geeko assets/ ./assets
+COPY --chown=geeko:geeko dist/ ./dist
+
+CMD ["node", "./dist/main.js"]
