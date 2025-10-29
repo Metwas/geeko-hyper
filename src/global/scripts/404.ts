@@ -36,7 +36,7 @@ import { resolve } from "node:path";
  * @type {Script}
  */
 export const DEFAULT_404_SCRIPT: Script = {
-       root: resolve( process.cwd(), "./scripts/404/" ),
+       root: resolve( process.cwd(), "./assets/404/" ),
        shell: ScriptShell.WEB,
        file: "404.html",
        id: "404",
