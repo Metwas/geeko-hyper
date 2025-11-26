@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from '../../global/injector/inject.tokens';
 import { injectConfigurationService } from '../../global/injector/ConfigurationProvider';

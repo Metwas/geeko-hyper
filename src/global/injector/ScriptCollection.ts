@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { SCRIPT_WATCH_SERVICE, SCRIPT_COLLECTOR_TOKEN, SCRIPT_CONFIGURATION_KEY } from "./script.tokens";
 import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from "./inject.tokens";

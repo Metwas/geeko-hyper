@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IScriptSourceProvider } from "../../modules/script/interfaces/IScriptSourceProvider";
 import { ScriptInjectorService } from "../../modules/script/services/ScriptInjectorService";

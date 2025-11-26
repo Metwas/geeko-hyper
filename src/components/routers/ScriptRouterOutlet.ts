@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { IFRAME_URL_REGEX, SCRIPT_ID_REGEX, GLOBAL_SCRIPTS_URI } from "../../global/scripts/paths";
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
