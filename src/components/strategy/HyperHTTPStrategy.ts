@@ -113,7 +113,7 @@ export class HyperExpressStrategy extends Server implements CustomTransportStrat
               }
               catch ( error )
               {
-                     this.log.error( error );
+                     this.log.error( error as Error );
               }
        }
 

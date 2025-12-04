@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ReadStream, createReadStream, readFileSync } from "node:fs";
 import { extension } from "@geeko/configuration";
@@ -206,7 +206,7 @@ export const decompress = ( buffer: Buffer ): Promise<Buffer> =>
 {
        return new Promise( ( resolve, reject ) =>
        {
-              gunzip( buffer, ( error: Error, decompressed: Buffer ) =>
+              gunzip( buffer, ( error: Error | null, decompressed: Buffer ) =>
               {
                      error ? reject( error ) : resolve( decompressed );
               } );

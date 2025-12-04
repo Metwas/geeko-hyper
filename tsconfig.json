@@ -20,7 +20,7 @@
               "forceConsistentCasingInFileNames": true,
               "noImplicitAny": false,
               "strictBindCallApply": false,
-              "strict": false,
+              "strict": true,
               "noFallthroughCasesInSwitch": false
        }
 }

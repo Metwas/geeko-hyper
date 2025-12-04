@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 const { DefaultSourceProvider } = require("../../dist/modules/script/interfaces/DefaultSourceProvider");
 const { ConfigurationService, FileProvider } = require("@geeko/configuration");
