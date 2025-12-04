@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { FILE_CHANGE_EVENT, FILE_CREATE_EVENT, FILE_DELETE_EVENT, FileFragment, FileInfo, FileValidator, FsDetector, directory, extension, filename } from "@geeko/os";
 import { SCRIPT_ENTRY_NAME, SCRIPT_MANIFEST } from "../../../global/injector/script.tokens";
@@ -142,7 +142,7 @@ export class ScriptCollection extends Collection<Script, string>
               }
               catch ( error )
               {
-                     this.onError( error );
+                     this.onError( error as Error );
               }
        }
 
@@ -296,7 +296,7 @@ export class ScriptCollection extends Collection<Script, string>
               }
               catch ( error )
               {
-                     this.onError( error );
+                     this.onError( error as Error );
               }
        }
 
@@ -344,7 +344,7 @@ export class ScriptCollection extends Collection<Script, string>
               }
               catch ( error )
               {
-                     this.onError( error );
+                     this.onError( error as Error );
               }
        }
 
@@ -356,10 +356,7 @@ export class ScriptCollection extends Collection<Script, string>
         */
        protected onMessage( message: string ): void
        {
-              if ( this.log )
-              {
-                     this.log.verbose( message );
-              }
+              this.log?.verbose( message );
        }
 
        /**
@@ -370,10 +367,7 @@ export class ScriptCollection extends Collection<Script, string>
         */
        protected onError( error: Error | string ): void
        {
-              if ( this.log )
-              {
-                     this.log.error( error );
-              }
+              this.log?.error( error );
        }
 
        /**

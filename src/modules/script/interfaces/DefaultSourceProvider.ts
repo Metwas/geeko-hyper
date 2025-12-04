@@ -22,7 +22,7 @@
      SOFTWARE.
 */
 
-/**_-_-_-_-_-_-_-_-_-_-_-_-_- @Imports _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+/**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { HTTP_REGEX_PATH, SCRIPT_REPLACE_TAG, SCRIPT_TAG_WRAPPER, SOURCE_AUTH_TOKEN, INJECTOR_CONFIGURATION_KEY } from "../../../global/injector/script.tokens";
 import { INJECTABLE_NEEDLE_BUFFER, decompress } from "../../../tools/stream";
@@ -159,7 +159,7 @@ export class DefaultSourceProvider implements IScriptSourceProvider
               }
               catch ( error )
               {
-                     this.log?.error( error.message );
+                     this.log?.error( error as Error );
               }
        }
 
