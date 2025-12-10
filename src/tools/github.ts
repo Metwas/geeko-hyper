@@ -30,38 +30,42 @@ import { JsonLike } from "@geeko/serialization";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Gets the github release from the specified version. Defaults to 'latest' 
- * 
+ * Gets the github release from the specified version. Defaults to 'latest'
+ *
  * @public
- * @param {String} version 
- * @param {Array<JsonLike>} releases 
- * @returns {JsonLike} 
+ * @param {String} version
+ * @param {Array<JsonLike>} releases
+ * @returns {JsonLike}
  */
-export const getRelease = ( version: string, releases: Array<JsonLike> ): GithubReleaseOptions | undefined =>
-{
+export const getRelease = (
+       version: string,
+       releases: Array<JsonLike>,
+): GithubReleaseOptions | undefined => {
        const length: number = releases?.length ?? 0;
        let index: number = 0;
 
-       if ( length === 0 )
-       {
+       if (length === 0) {
               return void 0;
        }
 
-       for ( ; index < length; ++index )
-       {
-              const release: JsonLike = releases[ index ];
-              const latest: boolean = ( !version || version === "latest" ) && index === 0;
+       for (; index < length; ++index) {
+              const release: JsonLike = releases[index];
+              const latest: boolean =
+                     (!version || version === "latest") && index === 0;
 
-              if ( latest || ( release?.tag_name && release?.tag_name === version ) )
-              {
-                     const assets: JsonLike = release.assets?.[ 0 ];
+              if (
+                     latest ||
+                     (release?.tag_name && release?.tag_name === version)
+              ) {
+                     const assets: JsonLike = release.assets?.[0];
 
-                     if ( assets )
-                     {
+                     if (assets) {
                             return {
-                                   compressed: assets.content_type === "application/octet-stream",
+                                   compressed:
+                                          assets.content_type ===
+                                          "application/octet-stream",
                                    url: assets.browser_download_url,
-                                   version: release.tag_name
+                                   version: release.tag_name,
                             };
                      }
               }

@@ -22,27 +22,30 @@
      SOFTWARE.
 */
 
-export type PropertyMetadata = { property: unknown; instance: unknown; };
-export type PropertyScanCallback = ( token: ProviderToken, metadata: PropertyMetadata ) => void;
+export type PropertyMetadata = { property: unknown; instance: unknown };
+export type PropertyScanCallback = (
+       token: ProviderToken,
+       metadata: PropertyMetadata,
+) => void;
 export type ProviderToken = string | symbol;
 
 /**
  * Property metadata factory options
- * 
+ *
  * @public
  */
 export type ProviderPropertyMetadata = {
        /**
         * Metadata scanner factory
-        * 
+        *
         * @public
-        * @param {String} key 
+        * @param {String} key
         */
-       scan( key: ProviderToken ): any;
+       scan(key: ProviderToken): any;
 
        /**
         * Provider property reference
-        * 
+        *
         * @public
         * @type {Object | Function}
         */

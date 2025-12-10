@@ -31,12 +31,12 @@ import { resolve } from "node:path";
 
 /**
  * 404 'Not found' script
- * 
+ *
  * @public
  * @type {Script}
  */
 export const DEFAULT_404_SCRIPT: Script = {
-       root: resolve( process.cwd(), "./assets/404/" ),
+       root: resolve(process.cwd(), "./assets/404/"),
        shell: ScriptShell.WEB,
        file: "404.html",
        id: "404",

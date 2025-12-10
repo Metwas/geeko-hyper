@@ -30,24 +30,19 @@ import { Stats, promises } from "node:fs";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Awaitable FS @see Stats helper 
- * 
+ * Awaitable FS @see Stats helper
+ *
  * @public
  * @returns {Promise<Stats>}
  */
-export const getFsStat = async ( path: string ): Promise<Stats | undefined> =>
-{
-       try
-       {
-              if ( await exists( path ) === true )
-              {
-                     return await promises.stat( path );
+export const getFsStat = async (path: string): Promise<Stats | undefined> => {
+       try {
+              if ((await exists(path)) === true) {
+                     return await promises.stat(path);
               }
 
               return void 0;
-       }
-       catch ( error )
-       {
+       } catch (error) {
               return void 0;
        }
 };

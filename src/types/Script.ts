@@ -30,37 +30,35 @@ import { InjectOptions } from "./InjectOptions";
 
 /**
  * Possible @see Script shell or bootstrap types
- * 
+ *
  * @public
  */
-export enum ScriptShell
-{
+export enum ScriptShell {
        WEB,
-       NODE
-};
+       NODE,
+}
 
 /**
  * @see Script operating states
- * 
+ *
  * @public
  */
-export enum ScriptState
-{
+export enum ScriptState {
        DOWN,
        UP,
        ALARM,
        ERROR,
-};
+}
 
 /**
  * Core script interface options
- * 
+ *
  * @public
  */
 export type Script = {
        /**
         * Unique identifier of the script
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -68,15 +66,15 @@ export type Script = {
 
        /**
         * Script shell type
-        * 
+        *
         * @public
-        * @type {ScriptShell}        
+        * @type {ScriptShell}
         */
        shell: ScriptShell;
 
        /**
         * Unix timestamp of the time-to-live on this script therefore forcing any loaders to fetch from source if expired
-        * 
+        *
         * @public
         * @type {Number}
         */
@@ -84,7 +82,7 @@ export type Script = {
 
        /**
         * Path to the browsable script file, e.g: .html, .svg, .jsx, etc.
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -92,7 +90,7 @@ export type Script = {
 
        /**
         * Absolute path to the @see Script.file
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -100,15 +98,15 @@ export type Script = {
 
        /**
         * Root directory which contains the @see this.path & assets
-        * 
+        *
         * @public
         * @type {String}
         */
        root: string;
 
        /**
-        * Script operating state enumeration 
-        * 
+        * Script operating state enumeration
+        *
         * @public
         * @type {ScriptState}
         */
@@ -116,7 +114,7 @@ export type Script = {
 
        /**
         * Script custom status message
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -124,9 +122,9 @@ export type Script = {
 
        /**
         * Flag to allow for automatic code injection from the core API @see HttpScriptService
-        * 
+        *
         * @public
-        * @type {Boolean} 
+        * @type {Boolean}
         */
        inject?: boolean | InjectOptions;
 };

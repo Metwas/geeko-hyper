@@ -30,7 +30,7 @@ import { Request, Response, Websocket } from "hyper-express";
 
 /**
  * Core @see Route options
- * 
+ *
  * @public
  */
 export type RouteOptions = {
@@ -39,22 +39,22 @@ export type RouteOptions = {
 };
 
 /**
- * @see Websocket specific @see Router options 
- * 
+ * @see Websocket specific @see Router options
+ *
  * @public
  */
 export type WebsocketRoute = RouteOptions & {
-       handler: ( socket: Websocket ) => void;
+       handler: (socket: Websocket) => void;
        method: "WS";
 };
 
 /**
  * HTTP specific @see Router options
- * 
+ *
  * @public
  */
 export type HttpRoute = RouteOptions & {
-       handler: ( request: Request, response: Response ) => void;
+       handler: (request: Request, response: Response) => void;
        method: "GET" | "POST" | "PUT" | "DELETE" | "TRACE";
 };
 

@@ -24,7 +24,7 @@
 
 /**
  * @see RegExp for matching non alphabet & decimal charactors
- * 
+ *
  * @public
  * @type {String}
  */
@@ -32,23 +32,23 @@ export const NON_CHAR_REG: RegExp = /[^a-z-A-Z\d]/g;
 
 /**
  * Attempts to extract the specified @see String key from the provided @see String url
- * 
+ *
  * @public
- * @param {String} url 
+ * @param {String} url
  * @param {String} key
  * @returns {String}
  */
-export const extractKeyFromUrl = ( url: string, key: string ): string | undefined =>
-{
-       if ( typeof url !== "string" || !url || typeof key !== "string" || !key )
-       {
+export const extractKeyFromUrl = (
+       url: string,
+       key: string,
+): string | undefined => {
+       if (typeof url !== "string" || !url || typeof key !== "string" || !key) {
               return void 0;
        }
 
-       let index: number = url.indexOf( key );
+       let index: number = url.indexOf(key);
 
-       if ( index === -1 )
-       {
+       if (index === -1) {
               return void 0;
        }
 
@@ -56,13 +56,11 @@ export const extractKeyFromUrl = ( url: string, key: string ): string | undefine
        const length: number = url.length;
        let value: string = "";
 
-       for ( ; index < length; ++index )
-       {
-              const char: string = url[ index ];
-              const matches: RegExpMatchArray | null = char.match( NON_CHAR_REG );
+       for (; index < length; ++index) {
+              const char: string = url[index];
+              const matches: RegExpMatchArray | null = char.match(NON_CHAR_REG);
 
-              if ( matches && matches.length > 0 )
-              {
+              if (matches && matches.length > 0) {
                      break;
               }
 

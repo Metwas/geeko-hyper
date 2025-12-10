@@ -31,7 +31,7 @@ import { Script } from "./Script";
 
 /**
  * @see Script streaming options
- * 
+ *
  * @public
  */
 export type StreamOptions = {

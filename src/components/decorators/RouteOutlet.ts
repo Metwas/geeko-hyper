@@ -30,17 +30,19 @@ import { SetMetadata } from "@nestjs/common";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see RouterOutlet 
- * 
+ * @see RouterOutlet
+ *
  * @public
  * @param {String} uri
  * @param {Object} options
  * @returns {CustomDecorator}
  */
-export function RouteOutlet( uri?: string | undefined, options?: any ): ClassDecorator
-{
-       return SetMetadata( ROUTE_OUTLET_TOKEN, {
+export function RouteOutlet(
+       uri?: string | undefined,
+       options?: any,
+): ClassDecorator {
+       return SetMetadata(ROUTE_OUTLET_TOKEN, {
               options: options,
-              path: uri
-       } );
-};
+              path: uri,
+       });
+}

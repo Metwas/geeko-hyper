@@ -31,14 +31,13 @@ import { Router } from "hyper-express";
 
 /**
  * Hyperexpress @see Router dyanmic route management interface
- * 
+ *
  * @public
  */
-export interface IRouterOutlet
-{
+export interface IRouterOutlet {
        /**
         * Gets the underlying Hyperexpress @see Router
-        * 
+        *
         * @public
         * @returns {Router}
         */
@@ -46,7 +45,7 @@ export interface IRouterOutlet
 
        /**
         * Gets the predefined @see Route references
-        * 
+        *
         * @public
         * @returns {Array<Route>}
         */
@@ -54,29 +53,27 @@ export interface IRouterOutlet
 
        /**
         * Adds the specified path and handler to this @see IRouterOutlet instance
-        * 
+        *
         * @public
         * @param {Route} route
         */
-       addRoute( route: Route ): void;
+       addRoute(route: Route): void;
 }
 
 /**
  * Hyperexpress @see Router dyanmic route management interface
- * 
+ *
  * @public
  */
-export abstract class RouterOutlet implements IRouterOutlet
-{
+export abstract class RouterOutlet implements IRouterOutlet {
        /**
         * Optionally provide a hyperexpress @see Router instance
-        * 
+        *
         * @public
         * @param {String} tag
-        * @param {Router} router 
+        * @param {Router} router
         */
-       public constructor( tag?: string, router?: Router )
-       {
+       public constructor(tag?: string, router?: Router) {
               this._routes = new Map<string, Route>();
               this._router = router ?? new Router();
 
@@ -85,15 +82,15 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Router prefix tag
-        * 
+        *
         * @public
         * @type {String}
         */
        public readonly tag: string | undefined = void 0;
 
        /**
-        * Optional Router version number 
-        * 
+        * Optional Router version number
+        *
         * @public
         * @type {String}
         */
@@ -101,7 +98,7 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Underlying @see HyperExpressServer Router instance
-        * 
+        *
         * @protected
         * @type {Router}
         */
@@ -109,7 +106,7 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Underlying @see Route instances
-        * 
+        *
         * @protected
         * @type {Array<Route>}
         */
@@ -117,58 +114,73 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Gets the underlying Hyperexpress @see Router
-        * 
+        *
         * @public
         * @returns {Router}
         */
-       public router(): Router | undefined
-       {
+       public router(): Router | undefined {
               return this._router;
        }
 
        /**
         * Gets the predefined @see Route references
-        * 
+        *
         * @public
         * @returns {Array<Route>}
         */
-       public getRoutes(): Array<Route> | undefined
-       {
-              return this._routes ? Array.from( this._routes?.values() ) : void 0;
+       public getRoutes(): Array<Route> | undefined {
+              return this._routes ? Array.from(this._routes?.values()) : void 0;
        }
 
        /**
         * Adds the specified path and handler to this @see IRouterOutlet instance
-        * 
+        *
         * @public
         * @param {Route} route
         * @param {WSRouteOptions | RouteOptions} options
         */
-       public addRoute( route: Route, options?: any ): void
-       {
-              if ( route && this._routes?.has( route.path ) === false )
-              {
-                     this._routes.set( route.path, route );
+       public addRoute(route: Route, options?: any): void {
+              if (route && this._routes?.has(route.path) === false) {
+                     this._routes.set(route.path, route);
                      /** Attach to the underlying @see Router */
-                     switch ( route.method )
-                     {
+                     switch (route.method) {
                             case "WS":
-                                   this._router?.ws( route.path, options, route.handler );
+                                   this._router?.ws(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "GET":
-                                   this._router?.get( route.path, options, route.handler );
+                                   this._router?.get(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "PUT":
                             case "POST":
-                                   this._router?.post( route.path, options, route.handler );
+                                   this._router?.post(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "DELETE":
-                                   this._router?.delete( route.path, options, route.handler );
+                                   this._router?.delete(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "TRACE":
-                                   this._router?.trace( route.path, options, route.handler );
+                                   this._router?.trace(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
-                     };
+                     }
               }
        }
 }

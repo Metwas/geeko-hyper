@@ -34,20 +34,18 @@ import { FsDetector } from "@geeko/os";
 
 /**
  * Injects an instance of script-scoped @see FsDetector
- * 
+ *
  * @public
  * @returns {Provider<FsDetector>}
  */
-export const injectScriptWatcher = (): Provider<FsDetector> =>
-{
+export const injectScriptWatcher = (): Provider<FsDetector> => {
        return {
               provide: SCRIPT_WATCH_SERVICE,
-              useFactory: async ( logger: LogService ): Promise<FsDetector> =>
-              {
-                     return new FsDetector( {
-                            logger: logger
-                     } );
+              useFactory: async (logger: LogService): Promise<FsDetector> => {
+                     return new FsDetector({
+                            logger: logger,
+                     });
               },
-              inject: [ GLOBAL_LOG_PROVIDER ]
+              inject: [GLOBAL_LOG_PROVIDER],
        };
 };

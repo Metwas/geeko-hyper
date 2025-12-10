@@ -24,127 +24,143 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { CustomTransportStrategy, Server } from '@nestjs/microservices';
+import { CustomTransportStrategy, Server } from "@nestjs/microservices";
 import { Server as HyperExpressServer, Router } from "hyper-express";
 import { ConnectionOptions } from "../../types/ConnectionOptions";
 import { ConfigurationService } from "@geeko/configuration";
-import { RouterOutlet } from '../routers/Router';
+import { RouterOutlet } from "../routers/Router";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
  * @see HyperExpressServer microservice strategy
- * 
+ *
  * @public
  */
-export class HyperExpressStrategy extends Server implements CustomTransportStrategy
+export class HyperExpressStrategy
+       extends Server
+       implements CustomTransportStrategy
 {
        /**
         * @public
         * @param {ConfigurationService} configuration
         * @param {LogService} log
-        * @param {ServerConstructorOptions} options 
+        * @param {ServerConstructorOptions} options
         */
-       public constructor( public readonly configuration: ConfigurationService, public readonly log: LogService, public routerOutlets: Array<RouterOutlet>, options?: any )
-       {
+       public constructor(
+              public readonly configuration: ConfigurationService,
+              public readonly log: LogService,
+              public routerOutlets: Array<RouterOutlet>,
+              options?: any,
+       ) {
               super();
               /** Create new @see HyperExpressServer server instance */
-              this._server = new HyperExpressServer( options );
+              this._server = new HyperExpressServer(options);
        }
 
        /**
         * @see HyperExpressServer reference
-        * 
+        *
         * @private
         */
        private _server: HyperExpressServer | undefined = void 0;
 
        /**
         * Initializes the @see HyperExpressServer socket listener
-        * 
+        *
         * @public
         * @param {Function} callback
         */
-       public async listen( callback?: () => void ): Promise<void>
-       {
-              try
-              {
-                     const options: ConnectionOptions = await this.configuration.get( "hyper" );
+       public async listen(callback?: () => void): Promise<void> {
+              try {
+                     const options: ConnectionOptions =
+                            await this.configuration.get("hyper");
 
                      const host: string = options?.host ?? "127.0.0.1";
-                     const port: number = Number( options?.port ?? await this.configuration.get( "GEEKO_HTTP_PORT", {
-                            env: true
-                     } ) ) || 3333;
+                     const port: number =
+                            Number(
+                                   options?.port ??
+                                          (await this.configuration.get(
+                                                 "GEEKO_HTTP_PORT",
+                                                 {
+                                                        env: true,
+                                                 },
+                                          )),
+                            ) || 3333;
 
-                     this.log.verbose( `Initializing HTTP server on [port] ${port} [host] ${host}` );
+                     this.log.verbose(
+                            `Initializing HTTP server on [port] ${port} [host] ${host}`,
+                     );
 
                      /** Inject @see Router modules */
                      const outlets: Array<RouterOutlet> = this.routerOutlets;
                      const length: number = outlets?.length ?? 0;
                      let index: number = 0;
 
-                     for ( ; index < length; ++index )
-                     {
-                            const outlet: RouterOutlet = this.routerOutlets[ index ];
+                     for (; index < length; ++index) {
+                            const outlet: RouterOutlet =
+                                   this.routerOutlets[index];
 
-                            if ( outlet )
-                            {
-                                   const router: Router | undefined = outlet.router();
+                            if (outlet) {
+                                   const router: Router | undefined =
+                                          outlet.router();
 
-                                   if ( router )
-                                   {
-                                          this.log.debug( `Adding router outlet [${outlet.tag ?? ( "::" + index )}]` );
-                                          this._server?.use( outlet.tag ?? "", router );
+                                   if (router) {
+                                          this.log.debug(
+                                                 `Adding router outlet [${outlet.tag ?? "::" + index}]`,
+                                          );
+                                          this._server?.use(
+                                                 outlet.tag ?? "",
+                                                 router,
+                                          );
                                    }
                             }
                      }
 
                      /** Finally listen on the configured port & host */
-                     await this._server?.listen( port, host, () =>
-                     {
-                            this.log.info( `HTTP server now listening on [port] ${port} [host] ${host}` );
-                     } );
+                     await this._server?.listen(port, host, () => {
+                            this.log.info(
+                                   `HTTP server now listening on [port] ${port} [host] ${host}`,
+                            );
+                     });
 
-                     if ( typeof callback === "function" )
-                     {
+                     if (typeof callback === "function") {
                             callback();
                      }
-              }
-              catch ( error )
-              {
-                     this.log.error( error as Error );
+              } catch (error) {
+                     this.log.error(error as Error);
               }
        }
 
        /**
         * Triggered on application shutdown.
-        * 
+        *
         * @public
         */
-       public close()
-       {
-              this.log.verbose( `Closing HTTP server [port] ${this._server?.port}` );
+       public close() {
+              this.log.verbose(
+                     `Closing HTTP server [port] ${this._server?.port}`,
+              );
               this._server?.close();
        }
 
        /**
         * Attach external server event listeners
-        * 
+        *
         * @public
         * @param {String} event
         * @param {Function} callback
         */
-       public on( event: string, callback: Function ) { }
+       public on(event: string, callback: Function) {}
 
        /**
         * Returns the underlying @see HyperExpressServer reference
-        * 
+        *
         * @public
         * @returns {HyperExpressServer}
         */
-       public unwrap<T = HyperExpressServer>(): T
-       {
+       public unwrap<T = HyperExpressServer>(): T {
               return this._server as any;
        }
 }

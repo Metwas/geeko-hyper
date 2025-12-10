@@ -24,58 +24,62 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ROUTE_DELETE_TOKEN, ROUTE_GET_TOKEN, ROUTE_POST_TOKEN } from "../../global/injector/inject.tokens";
+import {
+       ROUTE_DELETE_TOKEN,
+       ROUTE_GET_TOKEN,
+       ROUTE_POST_TOKEN,
+} from "../../global/injector/inject.tokens";
 import { CustomDecorator, SetMetadata } from "@nestjs/common";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see RouterOutlet RESTful GET method decorator 
- * 
- * @public
- * @param {String} uri
- * @param {Object} options 
- * @returns {CustomDecorator}
- */
-export function Get( uri?: string | undefined, options?: any ): CustomDecorator
-{
-       return SetMetadata( ROUTE_GET_TOKEN, {
-              options: options,
-              method: "GET",
-              path: uri
-       } );
-};
-
-/**
- * @see RouterOutlet RESTful POST method decorator 
- * 
- * @public
- * @param {String} uri
- * @param {Object} options 
- * @returns {CustomDecorator}
- */
-export function Post( uri?: string | undefined, options?: any ): CustomDecorator
-{
-       return SetMetadata( ROUTE_POST_TOKEN, {
-              options: options,
-              method: "POST",
-              path: uri
-       } );
-};
-
-/**
- * @see RouterOutlet RESTful DELETE method decorator 
- * 
+ * @see RouterOutlet RESTful GET method decorator
+ *
  * @public
  * @param {String} uri
  * @param {Object} options
  * @returns {CustomDecorator}
  */
-export function Delete( uri?: string | undefined, options?: any ): CustomDecorator
-{
-       return SetMetadata( ROUTE_DELETE_TOKEN, {
+export function Get(uri?: string | undefined, options?: any): CustomDecorator {
+       return SetMetadata(ROUTE_GET_TOKEN, {
+              options: options,
+              method: "GET",
+              path: uri,
+       });
+}
+
+/**
+ * @see RouterOutlet RESTful POST method decorator
+ *
+ * @public
+ * @param {String} uri
+ * @param {Object} options
+ * @returns {CustomDecorator}
+ */
+export function Post(uri?: string | undefined, options?: any): CustomDecorator {
+       return SetMetadata(ROUTE_POST_TOKEN, {
+              options: options,
+              method: "POST",
+              path: uri,
+       });
+}
+
+/**
+ * @see RouterOutlet RESTful DELETE method decorator
+ *
+ * @public
+ * @param {String} uri
+ * @param {Object} options
+ * @returns {CustomDecorator}
+ */
+export function Delete(
+       uri?: string | undefined,
+       options?: any,
+): CustomDecorator {
+       return SetMetadata(ROUTE_DELETE_TOKEN, {
               options: options,
               method: "DELETE",
-              path: uri
-       } );
-};
+              path: uri,
+       });
+}

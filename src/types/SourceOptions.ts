@@ -24,13 +24,13 @@
 
 /**
  * @see ScriptInjectorService source options
- * 
+ *
  * @public
  */
 export type SourceOptions = {
        /**
-        * Wraps the source @see Buffer in the specified string tag. Defaults to <script> if set to true 
-        * 
+        * Wraps the source @see Buffer in the specified string tag. Defaults to <script> if set to true
+        *
         * @public
         * @type {Boolean | String}
         */
@@ -38,7 +38,7 @@ export type SourceOptions = {
 
        /**
         * Optional source version filter
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -46,7 +46,7 @@ export type SourceOptions = {
 
        /**
         * Source fetch method, such as 'github' releases
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -54,7 +54,7 @@ export type SourceOptions = {
 
        /**
         * Authentication token for a secure remote server
-        * 
+        *
         * @public
         * @type {String}
         */
@@ -62,7 +62,7 @@ export type SourceOptions = {
 
        /**
         * The source local or remote url
-        * 
+        *
         * @public
         * @type {String}
         */

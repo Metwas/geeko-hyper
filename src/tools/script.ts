@@ -29,13 +29,12 @@ import { ScriptShell } from "../types/Script";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Attempts to determine the @see ScriptShell type by the given file path 
- * 
+ * Attempts to determine the @see ScriptShell type by the given file path
+ *
  * @public
- * @param {String} path 
+ * @param {String} path
  * @returns {ScriptShell}
  */
-export const getScriptShellType = ( path: string ): ScriptShell =>
-{
+export const getScriptShellType = (path: string): ScriptShell => {
        return ScriptShell.WEB;
 };

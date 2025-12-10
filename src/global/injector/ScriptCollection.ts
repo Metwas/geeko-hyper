@@ -24,8 +24,15 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { SCRIPT_WATCH_SERVICE, SCRIPT_COLLECTOR_TOKEN, SCRIPT_CONFIGURATION_KEY } from "./script.tokens";
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from "./inject.tokens";
+import {
+       SCRIPT_WATCH_SERVICE,
+       SCRIPT_COLLECTOR_TOKEN,
+       SCRIPT_CONFIGURATION_KEY,
+} from "./script.tokens";
+import {
+       GLOBAL_CONFIGURATION_PROVIDER,
+       GLOBAL_LOG_PROVIDER,
+} from "./inject.tokens";
 import { ScriptCollection } from "../../modules/script/services/ScriptCollection";
 import { ScriptWatchOptions } from "../../types/ScriptConfigurationOptions";
 import { ConfigurationService } from "@geeko/configuration";
@@ -37,27 +44,35 @@ import { FsDetector } from "@geeko/os";
 
 /**
  * Injects an instance of @see ScriptCollection
- * 
+ *
  * @public
  * @returns {Provider<ScriptCollection>}
  */
-export const injectScriptCollection = (): Provider<ScriptCollection> =>
-{
+export const injectScriptCollection = (): Provider<ScriptCollection> => {
        return {
               provide: SCRIPT_COLLECTOR_TOKEN,
-              useFactory: async ( watcher: FsDetector, configuration: ConfigurationService, logger: LogService ): Promise<ScriptCollection> =>
-              {
-                     const collector: ScriptCollection = new ScriptCollection( watcher, logger.branch( "Scripts" ) );
-                     const options: ScriptWatchOptions = await configuration.get( SCRIPT_CONFIGURATION_KEY );
+              useFactory: async (
+                     watcher: FsDetector,
+                     configuration: ConfigurationService,
+                     logger: LogService,
+              ): Promise<ScriptCollection> => {
+                     const collector: ScriptCollection = new ScriptCollection(
+                            watcher,
+                            logger.branch("Scripts"),
+                     );
+                     const options: ScriptWatchOptions =
+                            await configuration.get(SCRIPT_CONFIGURATION_KEY);
 
-                     if ( typeof options?.path === "string" )
-                     {
-                            logger.verbose( `Watching script path [${options.path}]` );
-                            collector.watch( options.path );
+                     if (options.path) {
+                            collector.watch(options.path);
                      }
 
                      return collector;
               },
-              inject: [ SCRIPT_WATCH_SERVICE, GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER ]
+              inject: [
+                     SCRIPT_WATCH_SERVICE,
+                     GLOBAL_CONFIGURATION_PROVIDER,
+                     GLOBAL_LOG_PROVIDER,
+              ],
        };
 };

@@ -26,7 +26,10 @@
 
 import { IScriptSourceProvider } from "../../modules/script/interfaces/IScriptSourceProvider";
 import { DefaultSourceProvider } from "../../modules/script/interfaces/DefaultSourceProvider";
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from "./inject.tokens";
+import {
+       GLOBAL_CONFIGURATION_PROVIDER,
+       GLOBAL_LOG_PROVIDER,
+} from "./inject.tokens";
 import { ConfigurationService } from "@geeko/configuration";
 import { SCRIPT_SOURCE_PROVIDER } from "./script.tokens";
 import { Provider } from "@nestjs/common";
@@ -36,18 +39,26 @@ import { LogService } from "@geeko/log";
 
 /**
  * Injects an instance of @see IScriptSourceProvider
- * 
+ *
  * @public
  * @returns {Provider<IScriptSourceProvider>}
  */
-export const injectScriptSourceProvider = (): Provider<IScriptSourceProvider> =>
-{
-       return {
-              provide: SCRIPT_SOURCE_PROVIDER,
-              useFactory: async ( configuration: ConfigurationService, logger: LogService ): Promise<IScriptSourceProvider> =>
-              {
-                     return new DefaultSourceProvider( configuration, logger.branch( "Injector" ) );
-              },
-              inject: [ GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER ]
+export const injectScriptSourceProvider =
+       (): Provider<IScriptSourceProvider> => {
+              return {
+                     provide: SCRIPT_SOURCE_PROVIDER,
+                     useFactory: async (
+                            configuration: ConfigurationService,
+                            logger: LogService,
+                     ): Promise<IScriptSourceProvider> => {
+                            return new DefaultSourceProvider(
+                                   configuration,
+                                   logger.branch("Injector"),
+                            );
+                     },
+                     inject: [
+                            GLOBAL_CONFIGURATION_PROVIDER,
+                            GLOBAL_LOG_PROVIDER,
+                     ],
+              };
        };
-};

@@ -32,17 +32,17 @@ import { Provider } from "@nestjs/common";
 
 /**
  * Injects an instance of @see ServerConstructorOptions
- * 
+ *
  * @public
  * @returns {Provider<ServerConstructorOptions>}
  */
-export const injectHyperOptions = (): Provider<ServerConstructorOptions | undefined> =>
-{
+export const injectHyperOptions = (): Provider<
+       ServerConstructorOptions | undefined
+> => {
        return {
               provide: HYPER_CTOR_OPTIONS,
-              useFactory: (): ServerConstructorOptions | undefined =>
-              {
+              useFactory: (): ServerConstructorOptions | undefined => {
                      return void 0;
-              }
+              },
        };
 };

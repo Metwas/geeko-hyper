@@ -33,18 +33,19 @@ import { Provider } from "@nestjs/common";
 
 /**
  * Injects an instance of @see ScriptInjectorService
- * 
+ *
  * @public
  * @returns {Provider<ScriptInjectorService>}
  */
-export const injectScriptInjectorService = (): Provider<ScriptInjectorService> =>
-{
-       return {
-              provide: SCRIPT_INJECTOR_TOKEN,
-              useFactory: async ( source: IScriptSourceProvider ): Promise<ScriptInjectorService> =>
-              {
-                     return new ScriptInjectorService( source );
-              },
-              inject: [ SCRIPT_SOURCE_PROVIDER ]
+export const injectScriptInjectorService =
+       (): Provider<ScriptInjectorService> => {
+              return {
+                     provide: SCRIPT_INJECTOR_TOKEN,
+                     useFactory: async (
+                            source: IScriptSourceProvider,
+                     ): Promise<ScriptInjectorService> => {
+                            return new ScriptInjectorService(source);
+                     },
+                     inject: [SCRIPT_SOURCE_PROVIDER],
+              };
        };
-};

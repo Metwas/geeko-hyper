@@ -23,7 +23,7 @@
 */
 
 /**
- * Script @see FsDetector specific options 
+ * Script @see FsDetector specific options
  */
 export type ScriptWatchOptions = {
        path: string;

@@ -35,37 +35,32 @@ import { LogService } from "@geeko/log";
 /**
  * @public
  */
-@RouteOutlet( "ws" )
-export class WebSocketRouterOutlet extends RouterOutlet
-{
+@RouteOutlet("ws")
+export class WebSocketRouterOutlet extends RouterOutlet {
        /**
         * @public
-        * @param {ScriptService} scriptService 
+        * @param {ScriptService} scriptService
         */
-       public constructor( public scriptService?: any )
-       {
+       public constructor(public scriptService?: any) {
               super();
 
               let logger = new LogService();
 
-              this.addRoute( {
+              this.addRoute({
                      path: "/connect",
                      method: "WS",
-                     handler: ( socket: Websocket ) =>
-                     {
-                            logger.info( "Websocket client connected: " );
+                     handler: (socket: Websocket) => {
+                            logger.info("Websocket client connected: ");
 
-                            socket.on( "message", ( message: string ) =>
-                            {
-                                   logger.info( message );
-                            } );
-                     }
-              } );
+                            socket.on("message", (message: string) => {
+                                   logger.info(message);
+                            });
+                     },
+              });
        }
 
-       @Ws( "connect" )
-       public connect( socket: Websocket ): void
-       {
-              console.log( "Websocket client connected: ", socket );
+       @Ws("connect")
+       public connect(socket: Websocket): void {
+              console.log("Websocket client connected: ", socket);
        }
 }

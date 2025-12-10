@@ -31,18 +31,20 @@ import { WSRouteOptions } from "hyper-express";
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * @see RouterOutlet Websocket method decorator 
- * 
+ * @see RouterOutlet Websocket method decorator
+ *
  * @public
  * @param {String} uri
  * @param {RouteOptions} options
  * @returns {CustomDecorator}
  */
-export function Ws( uri?: string | undefined, options?: WSRouteOptions ): CustomDecorator
-{
-       return SetMetadata( ROUTE_WS_TOKEN, {
+export function Ws(
+       uri?: string | undefined,
+       options?: WSRouteOptions,
+): CustomDecorator {
+       return SetMetadata(ROUTE_WS_TOKEN, {
               options: options,
               method: "WS",
-              path: uri
-       } );
-};
+              path: uri,
+       });
+}

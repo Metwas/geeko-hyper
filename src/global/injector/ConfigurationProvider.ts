@@ -24,7 +24,10 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { GLOBAL_CONFIGURATION_PROVIDER, GLOBAL_LOG_PROVIDER } from "./inject.tokens";
+import {
+       GLOBAL_CONFIGURATION_PROVIDER,
+       GLOBAL_LOG_PROVIDER,
+} from "./inject.tokens";
 import { ConfigurationService, FileProvider } from "@geeko/configuration";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";
@@ -33,25 +36,29 @@ import { LogService } from "@geeko/log";
 
 /**
  * Injects an instance of @see ConfigurationService
- * 
+ *
  * @public
  * @returns {Provider<ConfigurationService>}
  */
-export const injectConfigurationService = (): Provider<ConfigurationService> =>
-{
-       return {
-              provide: GLOBAL_CONFIGURATION_PROVIDER,
-              useFactory: async ( logger: LogService ): Promise<ConfigurationService> =>
-              {
-                     const provider: ConfigurationService = new ConfigurationService( new FileProvider( {
-                            path: "./app.config.json",
-                            fragment: false,
-                            logger: logger
-                     } ) );
+export const injectConfigurationService =
+       (): Provider<ConfigurationService> => {
+              return {
+                     provide: GLOBAL_CONFIGURATION_PROVIDER,
+                     useFactory: async (
+                            logger: LogService,
+                     ): Promise<ConfigurationService> => {
+                            const provider: ConfigurationService =
+                                   new ConfigurationService(
+                                          new FileProvider({
+                                                 path: "./app.config.json",
+                                                 fragment: false,
+                                                 logger: logger,
+                                          }),
+                                   );
 
-                     await provider.load();
-                     return provider;
-              },
-              inject: [ GLOBAL_LOG_PROVIDER ]
+                            await provider.load();
+                            return provider;
+                     },
+                     inject: [GLOBAL_LOG_PROVIDER],
+              };
        };
-};

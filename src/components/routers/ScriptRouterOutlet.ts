@@ -24,7 +24,11 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IFRAME_URL_REGEX, SCRIPT_ID_REGEX, GLOBAL_SCRIPTS_URI } from "../../global/scripts/paths";
+import {
+       IFRAME_URL_REGEX,
+       SCRIPT_ID_REGEX,
+       GLOBAL_SCRIPTS_URI,
+} from "../../global/scripts/paths";
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { Get, Post, Delete } from "../decorators/RESTful";
@@ -42,35 +46,32 @@ import mime from "mime-types";
 /**
  * @public
  */
-@RouteOutlet( GLOBAL_SCRIPTS_URI )
-export class ScriptRouterOutlet extends RouterOutlet
-{
+@RouteOutlet(GLOBAL_SCRIPTS_URI)
+export class ScriptRouterOutlet extends RouterOutlet {
        /**
         * @public
-        * @param {ScriptService} scriptService 
+        * @param {ScriptService} scriptService
         */
-       public constructor( public scriptService: ScriptService )
-       {
+       public constructor(public scriptService: ScriptService) {
               super();
 
-              this.addRoute( {
+              this.addRoute({
                      path: "/*",
                      method: "GET",
-                     handler: this.get.bind( this )
-              } );
+                     handler: this.get.bind(this),
+              });
        }
 
        /**
         * Streams the specified @see Script by id
-        * 
+        *
         * @public
-        * @param {Request} request 
-        * @param {Response} response 
+        * @param {Request} request
+        * @param {Response} response
         * @returns {Promise<void>}
         */
-       @Get( "/*" )
-       public async get( request: Request, response: Response ): Promise<void>
-       {
+       @Get("/*")
+       public async get(request: Request, response: Response): Promise<void> {
               const query: JsonLike = request.query;
 
               let id: string | undefined = query?.id;
@@ -78,37 +79,51 @@ export class ScriptRouterOutlet extends RouterOutlet
 
               let resourceRequest: boolean = false;
 
-              if ( !id )
-              {
+              if (!id) {
                      /** if no id was provided, check the @see referer header */
-                     const referer: string = request.headers[ "referer" ] ?? url;
-                     id = extractKeyFromUrl( referer, "?id" );
+                     const referer: string = request.headers["referer"] ?? url;
+                     id = extractKeyFromUrl(referer, "?id");
 
                      resourceRequest = true;
               }
 
               /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
-              url = url.replace( IFRAME_URL_REGEX, "" ).replace( SCRIPT_ID_REGEX, "" );
+              url = url
+                     .replace(IFRAME_URL_REGEX, "")
+                     .replace(SCRIPT_ID_REGEX, "");
 
-              if ( id )
-              {
-                     const streamer: ScriptStreamService = this.scriptService.stream;
-                     const script: Script | undefined = this.scriptService.get( id );
+              if (id) {
+                     const streamer: ScriptStreamService =
+                            this.scriptService.stream;
+                     const script: Script | undefined =
+                            this.scriptService.get(id);
 
-                     if ( !script )
-                     {
-                            return await streamer.notFound( request, response );
+                     if (!script) {
+                            return await streamer.notFound(request, response);
                      }
 
-                     let path: string = script.path ?? join( script.root, script.file );
+                     let path: string =
+                            script.path ?? join(script.root, script.file);
 
-                     if ( resourceRequest )
-                     {
-                            path = join( script.root, ( resourceRequest ? url : script.file ) );
-                            response.header( "Content-Type", ( mime.lookup( url ) || "application/octet-stream" ) );
+                     if (resourceRequest) {
+                            path = join(
+                                   script.root,
+                                   resourceRequest ? url : script.file,
+                            );
+                            response.header(
+                                   "Content-Type",
+                                   mime.lookup(url) ||
+                                          "application/octet-stream",
+                            );
                      }
 
-                     return await streamer.stream( path, script, request, response, !resourceRequest );
+                     return await streamer.stream(
+                            path,
+                            script,
+                            request,
+                            response,
+                            !resourceRequest,
+                     );
               }
 
               return void 0;

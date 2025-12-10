@@ -35,18 +35,19 @@ import { LogService } from "@geeko/log";
 
 /**
  * Injects an instance of @see ScriptStreamService
- * 
+ *
  * @public
  * @returns {Provider<ScriptStreamService>}
  */
-export const injectScriptStreamer = (): Provider<ScriptStreamService> =>
-{
+export const injectScriptStreamer = (): Provider<ScriptStreamService> => {
        return {
               provide: SCRIPT_STREAM_TOKEN,
-              useFactory: async ( injector: ScriptInjectorService, logger: LogService ): Promise<ScriptStreamService> =>
-              {
-                     return new ScriptStreamService( injector, logger );
+              useFactory: async (
+                     injector: ScriptInjectorService,
+                     logger: LogService,
+              ): Promise<ScriptStreamService> => {
+                     return new ScriptStreamService(injector, logger);
               },
-              inject: [ SCRIPT_INJECTOR_TOKEN, GLOBAL_LOG_PROVIDER ]
+              inject: [SCRIPT_INJECTOR_TOKEN, GLOBAL_LOG_PROVIDER],
        };
 };

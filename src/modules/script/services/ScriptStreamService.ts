@@ -38,106 +38,114 @@ import { LogService } from "@geeko/log";
 
 /**
  * @see Script HTTP streaming service
- * 
+ *
  * @public
  */
-export class ScriptStreamService
-{
+export class ScriptStreamService {
        /**
         * @public
         * @param {ScriptInjectorService} injector
-        * @param {LogService} logger 
+        * @param {LogService} logger
         */
-       public constructor( public readonly injector: ScriptInjectorService, private logger?: LogService ) { }
+       public constructor(
+              public readonly injector: ScriptInjectorService,
+              private logger?: LogService,
+       ) {}
 
        /**
         * Streams the specified @see StreamOptions on the given @see Response
-        * 
+        *
         * @public
         * @param {String} path
         * @param {Script} script
         * @param {Request} request
         * @param {Response} response
         * @param {Boolean} inject
-        * @returns {Promise<void>} 
+        * @returns {Promise<void>}
         */
-       public async stream( path: string, script: Script, request: Request, response: Response, inject: boolean = false ): Promise<void>
-       {
+       public async stream(
+              path: string,
+              script: Script,
+              request: Request,
+              response: Response,
+              inject: boolean = false,
+       ): Promise<void> {
               let needle: Buffer | Array<Buffer> | string | undefined = void 0;
               let source: Buffer | string | undefined = void 0;
 
-              if ( inject === true )
-              {
-                     if ( script.inject === null || script.inject === void 0 || script.inject === true )
-                     {
+              if (inject === true) {
+                     if (
+                            script.inject === null ||
+                            script.inject === void 0 ||
+                            script.inject === true
+                     ) {
                             source = this.injector.source();
                             needle = this.injector.needle();
-                     }
-                     else if ( ( script.inject as InjectOptions )?.replacer )
-                     {
-                            source = ( script.inject as InjectOptions ).replacer;
+                     } else if ((script.inject as InjectOptions)?.replacer) {
+                            source = (script.inject as InjectOptions).replacer;
 
-                            if ( typeof source === "string" )
-                            {
-                                   source = Buffer.from( source );
+                            if (typeof source === "string") {
+                                   source = Buffer.from(source);
                             }
                      }
 
-                     if ( ( script.inject as InjectOptions )?.needle )
-                     {
-                            needle = ( script.inject as InjectOptions ).needle;
+                     if ((script.inject as InjectOptions)?.needle) {
+                            needle = (script.inject as InjectOptions).needle;
 
-                            if ( typeof needle === "string" )
-                            {
-                                   needle = Buffer.from( needle );
+                            if (typeof needle === "string") {
+                                   needle = Buffer.from(needle);
                             }
                      }
               }
 
-              const stat: Stats | undefined = await getFsStat( path );
+              const stat: Stats | undefined = await getFsStat(path);
 
               // Handle 404 if file doesn't exist
-              if ( !stat?.isFile() )
-              {
-                     this.notFound( request, response );
+              if (!stat?.isFile()) {
+                     this.notFound(request, response);
                      return;
               }
 
-              if ( source && needle )
-              {
-                     this.logger?.debug( `Inject script [${path}] source [${source.length}]` );
-                     return injectStream( path, needle as Buffer, source, response );
+              if (source && needle) {
+                     this.logger?.debug(
+                            `Inject script [${path}] source [${source.length}]`,
+                     );
+                     return injectStream(
+                            path,
+                            needle as Buffer,
+                            source,
+                            response,
+                     );
               }
 
-              const fsStream: ReadStream = createReadStream( path );
-              return response.stream( fsStream );
+              const fsStream: ReadStream = createReadStream(path);
+              return response.stream(fsStream);
        }
 
        /**
         * Streams the 404 'Not found' @see Script
-        * 
+        *
         * @public
         * @param {Script} script
-        * @param {Request} request 
+        * @param {Request} request
         * @param {Response} response
-        * @returns {Promise<void>} 
+        * @returns {Promise<void>}
         */
-       public async notFound( request: Request, response: Response ): Promise<void>
-       {
+       public async notFound(
+              request: Request,
+              response: Response,
+       ): Promise<void> {
               const script: Script = DEFAULT_404_SCRIPT;
 
               const path: string = script.root + script.file;
-              const stat: Stats | undefined = await getFsStat( path );
+              const stat: Stats | undefined = await getFsStat(path);
 
-              if ( !stat?.isFile() )
-              {
+              if (!stat?.isFile()) {
                      // send 404 text if backup 404 script was not found.
-                     response.status( 404 ).send( 'Not Found' );
-              }
-              else
-              {
-                     const fsStream: ReadStream = createReadStream( path );
-                     return response.stream( fsStream );
+                     response.status(404).send("Not Found");
+              } else {
+                     const fsStream: ReadStream = createReadStream(path);
+                     return response.stream(fsStream);
               }
 
               return void 0;

@@ -24,7 +24,7 @@
 
 /**
  * Github release asset type
- * 
+ *
  * @public
  */
 export type GithubReleaseOptions = {

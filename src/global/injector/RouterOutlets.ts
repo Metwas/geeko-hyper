@@ -35,21 +35,21 @@ import { Provider } from "@nestjs/common";
 
 /**
  * Injects an collection of @see Array<RouterOutlet>
- * 
+ *
  * @public
  * @returns {Provider<Array<RouterOutlet>>}
  */
-export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> =>
-{
+export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
        return {
               provide: GLOBAL_ROUTE_OUTLETS,
-              useFactory: async ( script: ScriptService ): Promise<Array<RouterOutlet>> =>
-              {
+              useFactory: async (
+                     script: ScriptService,
+              ): Promise<Array<RouterOutlet>> => {
                      return [
-                            new WebSocketRouterOutlet( script ),
-                            new ScriptRouterOutlet( script )
+                            new WebSocketRouterOutlet(script),
+                            new ScriptRouterOutlet(script),
                      ];
               },
-              inject: [ ScriptService ]
+              inject: [ScriptService],
        };
 };

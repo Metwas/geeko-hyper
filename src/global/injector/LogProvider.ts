@@ -32,35 +32,30 @@ import { Provider } from "@nestjs/common";
 
 /**
  * Injects an instance of @see LogService
- * 
+ *
  * @public
  * @returns {Provider<LogService>}
  */
-export const injectLogProvider = (): Provider<LogService> =>
-{
+export const injectLogProvider = (): Provider<LogService> => {
        return {
               provide: GLOBAL_LOG_PROVIDER,
-              useFactory: (): LogService =>
-              {
-                     const args: Array<string> = process.argv.slice( 2 );
-                     const verbose: boolean = args.indexOf( "--verbose" ) > -1;
-                     const debug: boolean = args.indexOf( "--debug" ) > -1;
+              useFactory: (): LogService => {
+                     const args: Array<string> = process.argv.slice(2);
+                     const verbose: boolean = args.indexOf("--verbose") > -1;
+                     const debug: boolean = args.indexOf("--debug") > -1;
 
                      const env: string | undefined = process.env.NODE_ENV;
 
                      let level: LogLevel = "info";
 
-                     if ( debug || env === "development" )
-                     {
+                     if (debug || env === "development") {
                             level = "debug";
-                     }
-                     else if ( verbose )
-                     {
+                     } else if (verbose) {
                             level = "verbose";
                      }
 
-                     return new LogService( { level: level } );
+                     return new LogService({ level: level });
               },
-              inject: []
+              inject: [],
        };
 };

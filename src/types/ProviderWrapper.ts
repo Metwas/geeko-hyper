@@ -30,13 +30,13 @@ import { ProviderPropertyMetadata } from "./PropertyScanOptions";
 
 /**
  * Provider instance & @see ProviderPropertyMetadata wrapper
- * 
+ *
  * @public
  */
 export type ProviderWrapper = {
        /**
         * Provider @see ProviderPropertyMetadata
-        * 
+        *
         * @public
         * @type {ProviderPropertyMetadata}
         */
@@ -44,7 +44,7 @@ export type ProviderWrapper = {
 
        /**
         * Provider instance reference
-        * 
+        *
         * @type {Object}
         */
        instance: unknown;

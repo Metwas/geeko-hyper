@@ -24,13 +24,13 @@
 
 /**
  * @see Script injector options
- * 
+ *
  * @public
  */
 export type InjectOptions = {
        /**
         * Replacer token as either @see Buffer or @see String
-        * 
+        *
         * @public
         * @type {Buffer | String}
         */
@@ -38,7 +38,7 @@ export type InjectOptions = {
 
        /**
         * Replace matcher/needle token as either @see Buffer or @see String
-        * 
+        *
         * @public
         * @type {Buffer | String}
         */

@@ -39,18 +39,15 @@ let needleLength = needle.length;
 let carry = Buffer.alloc(0);
 
 const transform = new Transform({
-       transform (chunk, encoding, cb)
-       {
+       transform(chunk, encoding, cb) {
               /** Prepend @see carry from possible previous split @see Buffer chunk */
-              const data = Buffer.concat([ carry, chunk ]);
+              const data = Buffer.concat([carry, chunk]);
 
               /** Loop to find all @see needle references within the buffer */
-              while (true)
-              {
+              while (true) {
                      const indexOf = data.indexOf(needle, searchIndex);
 
-                     if (indexOf === -1)
-                     {
+                     if (indexOf === -1) {
                             break;
                      }
 
@@ -66,15 +63,15 @@ const transform = new Transform({
               this.push(data.subarray(searchIndex, data.length - overlap));
               cb();
        },
-       flush (cb)
-       {
-              if (carry.length)
-              {
+       flush(cb) {
+              if (carry.length) {
                      this.push(carry);
               }
 
               cb();
-       }
+       },
 });
 
-fsStream.pipe(transform).on("data", (data) => { process.stdout.write(data.toString()); });
+fsStream.pipe(transform).on("data", (data) => {
+       process.stdout.write(data.toString());
+});

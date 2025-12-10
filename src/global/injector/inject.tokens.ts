@@ -24,7 +24,7 @@
 
 /**
  * Global @see LogService provider token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -32,15 +32,16 @@ export const GLOBAL_LOG_PROVIDER: string = "GLOBAL_LOG_PROVIDER";
 
 /**
  * Global @see ConfigurationProvider provider token
- * 
+ *
  * @public
  * @type {String}
  */
-export const GLOBAL_CONFIGURATION_PROVIDER: string = "GLOBAL_CONFIGURATION_PROVIDER";
+export const GLOBAL_CONFIGURATION_PROVIDER: string =
+       "GLOBAL_CONFIGURATION_PROVIDER";
 
 /**
  * Global @see HyperExpressServer contructor options token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -48,7 +49,7 @@ export const HYPER_CTOR_OPTIONS: string = "HYPER_CTOR_OPTIONS";
 
 /**
  * Global @see RouterOutlet collection token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -56,7 +57,7 @@ export const GLOBAL_ROUTE_OUTLETS: string = "GLOBAL_ROUTE_OUTLETS";
 
 /**
  * @see RouterOutlet decorator token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -64,7 +65,7 @@ export const ROUTE_OUTLET_TOKEN: string = "ROUTE_OUTLET_TOKEN";
 
 /**
  * Route RESTFul GET method decorator token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -72,7 +73,7 @@ export const ROUTE_GET_TOKEN: string = "ROUTE_GET_TOKEN";
 
 /**
  * Route RESTFul POST/PUT method decorator token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -80,7 +81,7 @@ export const ROUTE_POST_TOKEN: string = "ROUTE_POST_TOKEN";
 
 /**
  * Route RESTFul DELETE method decorator token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -88,7 +89,7 @@ export const ROUTE_DELETE_TOKEN: string = "ROUTE_DELETE_TOKEN";
 
 /**
  * Route Websocket decorator token
- * 
+ *
  * @public
  * @type {String}
  */
@@ -96,7 +97,7 @@ export const ROUTE_WS_TOKEN: string = "ROUTE_WS_TOKEN";
 
 /**
  * @see Registry injection token
- * 
+ *
  * @public
  * @type {String}
  */
