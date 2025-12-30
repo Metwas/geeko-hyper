@@ -24,12 +24,18 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import {
+       GLOBAL_LOG_PROVIDER,
+       GLOBAL_ROUTE_OUTLETS,
+       ROUTE_OUTLET_TOKEN,
+} from "./inject.tokens";
 import { WebSocketRouterOutlet } from "../../components/routers/WebSocketRouterOutlet";
 import { ScriptRouterOutlet } from "../../components/routers/ScriptRouterOutlet";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { RouterOutlet } from "../../components/routers/Router";
-import { GLOBAL_ROUTE_OUTLETS } from "./inject.tokens";
 import { Provider } from "@nestjs/common";
+import { LogService } from "@geeko/log";
+import { Reflector } from "@geeko/meta";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -44,12 +50,30 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
               provide: GLOBAL_ROUTE_OUTLETS,
               useFactory: async (
                      script: ScriptService,
+                     logger: LogService,
               ): Promise<Array<RouterOutlet>> => {
+                     const routers: Array<RouterOutlet> | undefined =
+                            Reflector.getFor(ROUTE_OUTLET_TOKEN) as
+                                   | Array<RouterOutlet>
+                                   | undefined;
+
+                     if (!routers) {
+                            logger.debug("No injected routers");
+                            return [];
+                     }
+
+                     const length: number = routers?.length ?? 0;
+                     let index: number = 0;
+
+                     for (; index < length; ++index) {
+                            logger.info(routers[index].tag ?? "Unknown");
+                     }
+
                      return [
                             new WebSocketRouterOutlet(script),
                             new ScriptRouterOutlet(script),
                      ];
               },
-              inject: [ScriptService],
+              inject: [ScriptService, GLOBAL_LOG_PROVIDER],
        };
 };

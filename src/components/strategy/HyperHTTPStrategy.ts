@@ -50,8 +50,8 @@ export class HyperExpressStrategy
         */
        public constructor(
               public readonly configuration: ConfigurationService,
+              public readonly routerOutlets: Array<RouterOutlet>,
               public readonly log: LogService,
-              public routerOutlets: Array<RouterOutlet>,
               options?: any,
        ) {
               super();

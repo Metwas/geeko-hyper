@@ -63,8 +63,8 @@ import { LogService } from "@geeko/log";
 
        const http: HyperExpressStrategy = new HyperExpressStrategy(
               configuration,
-              logger.branch("hyper"),
               routerOutlets,
+              logger.branch("hyper"),
               hyper,
        );
        http.listen();

@@ -25,7 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { ROUTE_OUTLET_TOKEN } from "../../global/injector/inject.tokens";
-import { SetMetadata } from "@nestjs/common";
+import { SetMetadata } from "@geeko/meta";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
