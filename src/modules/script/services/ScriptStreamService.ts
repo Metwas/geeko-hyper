@@ -102,8 +102,10 @@ export class ScriptStreamService {
 
               // Handle 404 if file doesn't exist
               if (!stat?.isFile()) {
-                     this.notFound(request, response);
-                     return;
+                     return await ScriptStreamService.NOT_FOUND(
+                            request,
+                            response,
+                     );
               }
 
               if (source && needle) {
@@ -123,15 +125,14 @@ export class ScriptStreamService {
        }
 
        /**
-        * Streams the 404 'Not found' @see Script
+        * Streams the 404 'Not found' @see Script or text
         *
         * @public
-        * @param {Script} script
         * @param {Request} request
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       public async notFound(
+       public static async NOT_FOUND(
               request: Request,
               response: Response,
        ): Promise<void> {
@@ -143,6 +144,34 @@ export class ScriptStreamService {
               if (!stat?.isFile()) {
                      // send 404 text if backup 404 script was not found.
                      response.status(404).send("Not Found");
+              } else {
+                     const fsStream: ReadStream = createReadStream(path);
+                     return response.stream(fsStream);
+              }
+
+              return void 0;
+       }
+
+       /**
+        * Streams a the predefined 'error' @see Script or text
+        *
+        * @public
+        * @param {Request} request
+        * @param {Response} response
+        * @returns {Promise<void>}
+        */
+       public static async ERROR(
+              request: Request,
+              response: Response,
+       ): Promise<void> {
+              const script: Script = DEFAULT_404_SCRIPT;
+
+              const path: string = script.root + script.file;
+              const stat: Stats | undefined = await getFsStat(path);
+
+              if (!stat?.isFile()) {
+                     // send 404 text if backup 404 script was not found.
+                     response.status(500).send("Something went wrong");
               } else {
                      const fsStream: ReadStream = createReadStream(path);
                      return response.stream(fsStream);

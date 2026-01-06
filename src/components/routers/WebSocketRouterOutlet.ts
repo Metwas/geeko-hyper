@@ -24,36 +24,50 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { ScriptService } from "../../modules/script/services/ScriptService";
+import { GLOBAL_WEBSOCKET_URI } from "../../global/scripts/paths";
 import { RouteOutlet } from "../decorators/RouteOutlet";
+import { Router, Websocket } from "hyper-express";
 import { Ws } from "../decorators/Websocket";
-import { Websocket } from "hyper-express";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
+ * Websocket @see RouterOutlet interface
+ *
  * @public
  */
-@RouteOutlet("ws")
+@RouteOutlet(GLOBAL_WEBSOCKET_URI)
 export class WebSocketRouterOutlet extends RouterOutlet {
        /**
         * @public
-        * @param {ScriptService} scriptService
+        * @param {ScriptService} script
+        * @param {LogService} logger
+        * @param {Router} router
         */
-       public constructor(public scriptService?: any) {
-              super();
-
-              let logger = new LogService();
+       public constructor(
+              public script?: ScriptService,
+              public logger?: LogService,
+              router?: Router,
+       ) {
+              super(router);
 
               this.addRoute({
                      path: "/connect",
                      method: "WS",
                      handler: (socket: Websocket) => {
-                            logger.info("Websocket client connected: ");
+                            logger?.info("Websocket client connected: ");
 
                             socket.on("message", (message: string) => {
-                                   logger.info(message);
+                                   logger?.info(message);
+                            });
+
+                            socket.on("close", () => {
+                                   logger?.warn(
+                                          `WS Client ${socket.ip} closed`,
+                                   );
                             });
                      },
               });

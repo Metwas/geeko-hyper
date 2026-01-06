@@ -41,8 +41,15 @@ export function RouteOutlet(
        uri?: string | undefined,
        options?: any,
 ): ClassDecorator {
-       return SetMetadata(ROUTE_OUTLET_TOKEN, {
-              options: options,
-              path: uri,
-       });
+       return SetMetadata(
+              ROUTE_OUTLET_TOKEN,
+              {
+                     options: options,
+                     path: uri,
+              },
+              {
+                     injectable: true,
+                     token: uri,
+              },
+       );
 }

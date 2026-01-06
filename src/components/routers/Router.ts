@@ -70,23 +70,20 @@ export abstract class RouterOutlet implements IRouterOutlet {
         * Optionally provide a hyperexpress @see Router instance
         *
         * @public
-        * @param {String} tag
         * @param {Router} router
         */
-       public constructor(tag?: string, router?: Router) {
+       public constructor(router?: Router) {
               this._routes = new Map<string, Route>();
               this._router = router ?? new Router();
-
-              this.tag = tag;
        }
 
        /**
-        * Router prefix tag
+        * Router name
         *
-        * @public
+        * @protected
         * @type {String}
         */
-       public readonly tag: string | undefined = void 0;
+       protected _name: string = "";
 
        /**
         * Optional Router version number
@@ -111,6 +108,20 @@ export abstract class RouterOutlet implements IRouterOutlet {
         * @type {Array<Route>}
         */
        protected _routes: Map<string, Route> | undefined = void 0;
+
+       /**
+        * Router name
+        *
+        * @public
+        * @type {String}
+        */
+       public name(override?: string): string | undefined {
+              if (typeof override === "string") {
+                     this._name = override;
+              }
+
+              return this._name;
+       }
 
        /**
         * Gets the underlying Hyperexpress @see Router

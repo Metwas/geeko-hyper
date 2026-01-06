@@ -29,15 +29,29 @@ import {
        GLOBAL_ROUTE_OUTLETS,
        ROUTE_OUTLET_TOKEN,
 } from "./inject.tokens";
+
 import { WebSocketRouterOutlet } from "../../components/routers/WebSocketRouterOutlet";
 import { ScriptRouterOutlet } from "../../components/routers/ScriptRouterOutlet";
+import { CoreRouterOutlet } from "../../components/routers/CoreRouterOutlet";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { RouterOutlet } from "../../components/routers/Router";
+import { ModuleWrapper, Reflector, Type } from "@geeko/meta";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";
-import { Reflector } from "@geeko/meta";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+/**
+ * Core injectable @see RouterOutlet
+ *
+ * @private
+ * @type {Array<Type<RouterOutlet>>}
+ */
+const CORE_ROUTE_OUTLETS: Array<Type<RouterOutlet>> = [
+       WebSocketRouterOutlet,
+       ScriptRouterOutlet,
+       CoreRouterOutlet,
+];
 
 /**
  * Injects an collection of @see Array<RouterOutlet>
@@ -52,27 +66,53 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                      script: ScriptService,
                      logger: LogService,
               ): Promise<Array<RouterOutlet>> => {
-                     const routers: Array<RouterOutlet> | undefined =
-                            Reflector.getFor(ROUTE_OUTLET_TOKEN) as
-                                   | Array<RouterOutlet>
-                                   | undefined;
+                     const routes: Array<RouterOutlet> = [];
 
-                     if (!routers) {
-                            logger.debug("No injected routers");
-                            return [];
+                     const wrappers:
+                            | Array<ModuleWrapper<any, RouterOutlet>>
+                            | undefined =
+                            Reflector.getWrapperFor(ROUTE_OUTLET_TOKEN);
+
+                     if (wrappers) {
+                            const length: number = wrappers?.length ?? 0;
+                            let index: number = 0;
+
+                            for (; index < length; ++index) {
+                                   try {
+                                          const wrapper: ModuleWrapper<
+                                                 any,
+                                                 RouterOutlet
+                                          > = wrappers[index];
+
+                                          const target:
+                                                 | Type<RouterOutlet>
+                                                 | undefined = wrapper.target();
+
+                                          if (!target) {
+                                                 continue;
+                                          }
+
+                                          const metadata: any =
+                                                 wrapper.metadata();
+
+                                          const instance: RouterOutlet =
+                                                 new target(script, logger);
+
+                                          instance.name(metadata.path);
+                                          routes.push(instance);
+
+                                          logger.debug(
+                                                 `Adding route [${metadata.path}]`,
+                                          );
+                                   } catch (error) {
+                                          logger.error(
+                                                 (error as Error).message,
+                                          );
+                                   }
+                            }
                      }
 
-                     const length: number = routers?.length ?? 0;
-                     let index: number = 0;
-
-                     for (; index < length; ++index) {
-                            logger.info(routers[index].tag ?? "Unknown");
-                     }
-
-                     return [
-                            new WebSocketRouterOutlet(script),
-                            new ScriptRouterOutlet(script),
-                     ];
+                     return routes;
               },
               inject: [ScriptService, GLOBAL_LOG_PROVIDER],
        };

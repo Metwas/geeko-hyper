@@ -22,42 +22,8 @@
      SOFTWARE.
 */
 
-/**
- * Script URL ID regex
- *
- * @public
- * @type {RegExp}
- */
-export const SCRIPT_ID_REGEX: RegExp = /script\/\?id=\w+|script\//g;
-
-/**
- * Iframe URL regex
- *
- * @public
- * @type {RegExp}
- */
-export const IFRAME_URL_REGEX: RegExp = /\&iframe=\d+/g;
-
-/**
- * Global default scripts uri
- *
- * @public
- * @type {String}
- */
-export const GLOBAL_SCRIPTS_URI: string = "scripts";
-
-/**
- * Global default Websocket uri
- *
- * @public
- * @type {String}
- */
-export const GLOBAL_WEBSOCKET_URI: string = "ws";
-
-/**
- * Application root URI
- *
- * @public
- * @type {String}
- */
-export const GLOBAL_ROOT_URI: string = "/";
+export * from "./strategy/HyperHTTPStrategy";
+export * from "./decorators/RouteOutlet";
+export * from "./decorators/Websocket";
+export * from "./decorators/RESTful";
+export * from "./routers/Router";

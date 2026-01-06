@@ -30,6 +30,7 @@ import {
        GLOBAL_ROUTE_OUTLETS,
        HYPER_CTOR_OPTIONS,
 } from "./global/injector/inject.tokens";
+
 import { HyperExpressStrategy } from "./components/strategy/HyperHTTPStrategy";
 import { ConfigurationService } from "@geeko/configuration";
 import { RouterOutlet } from "./components/routers/Router";
@@ -56,8 +57,10 @@ import { LogService } from "@geeko/log";
        const configuration: ConfigurationService = context.get(
               GLOBAL_CONFIGURATION_PROVIDER,
        );
+
        const routerOutlets: Array<RouterOutlet> =
               context.get(GLOBAL_ROUTE_OUTLETS);
+
        const logger: LogService = context.get(GLOBAL_LOG_PROVIDER);
        const hyper: any = context.get(HYPER_CTOR_OPTIONS);
 
@@ -67,5 +70,6 @@ import { LogService } from "@geeko/log";
               logger.branch("hyper"),
               hyper,
        );
+
        http.listen();
 })(process.argv.slice(2));

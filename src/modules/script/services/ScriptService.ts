@@ -28,6 +28,7 @@ import {
        SCRIPT_COLLECTOR_TOKEN,
        SCRIPT_STREAM_TOKEN,
 } from "../../../global/injector/script.tokens";
+
 import { GLOBAL_LOG_PROVIDER } from "../../../global/injector/inject.tokens";
 import { ScriptStreamService } from "./ScriptStreamService";
 import { ScriptCollection } from "./ScriptCollection";
