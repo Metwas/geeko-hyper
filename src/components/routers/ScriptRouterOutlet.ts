@@ -25,19 +25,21 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import {
+       GLOBAL_SCRIPTS_URI,
        IFRAME_URL_REGEX,
        SCRIPT_ID_REGEX,
-       GLOBAL_SCRIPTS_URI,
 } from "../../global/scripts/paths";
+
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
+import { Request, Response, Router } from "hyper-express";
 import { Get, Post, Delete } from "../decorators/RESTful";
 import { RouteOutlet } from "../decorators/RouteOutlet";
 import { extractKeyFromUrl } from "../../tools/text";
-import { Request, Response } from "hyper-express";
 import { JsonLike } from "@geeko/serialization";
 import { Script } from "../../types/Script";
 import { RouterOutlet } from "./Router";
+import { LogService } from "@geeko/log";
 import { join } from "node:path";
 import mime from "mime-types";
 
@@ -50,13 +52,19 @@ import mime from "mime-types";
 export class ScriptRouterOutlet extends RouterOutlet {
        /**
         * @public
-        * @param {ScriptService} scriptService
+        * @param {ScriptService} script
+        * @param {LogService} logger
+        * @param {Router} router
         */
-       public constructor(public scriptService: ScriptService) {
-              super();
+       public constructor(
+              public script?: ScriptService,
+              public logger?: LogService,
+              router?: Router,
+       ) {
+              super(router);
 
               this.addRoute({
-                     path: "/*",
+                     path: `/:id`,
                      method: "GET",
                      handler: this.get.bind(this),
               });
@@ -70,21 +78,37 @@ export class ScriptRouterOutlet extends RouterOutlet {
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       @Get("/*")
+       @Get("/:id")
        public async get(request: Request, response: Response): Promise<void> {
-              const query: JsonLike = request.query;
+              if (!this.script) {
+                     this.logger?.debug(
+                            `Invalid [GET] request, url [${request.url}]`,
+                     );
 
-              let id: string | undefined = query?.id;
+                     return await ScriptStreamService.ERROR(request, response);
+              }
+
               let url: string = request.url;
+              let referer: string = request.headers["referer"];
+
+              let id: string | undefined = extractKeyFromUrl(
+                     referer ?? url,
+                     GLOBAL_SCRIPTS_URI,
+              );
 
               let resourceRequest: boolean = false;
 
-              if (!id) {
+              if (referer) {
                      /** if no id was provided, check the @see referer header */
                      const referer: string = request.headers["referer"] ?? url;
-                     id = extractKeyFromUrl(referer, "?id");
+                     id = extractKeyFromUrl(referer, GLOBAL_SCRIPTS_URI);
 
                      resourceRequest = true;
+              }
+
+              if (!id) {
+                     response.header["body"] = "No script is was specified";
+                     return ScriptStreamService.ERROR(request, response);
               }
 
               /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
@@ -93,28 +117,35 @@ export class ScriptRouterOutlet extends RouterOutlet {
                      .replace(SCRIPT_ID_REGEX, "");
 
               if (id) {
-                     const streamer: ScriptStreamService =
-                            this.scriptService.stream;
-                     const script: Script | undefined =
-                            this.scriptService.get(id);
+                     const streamer: ScriptStreamService = this.script.stream;
+                     const script: Script | undefined = this.script.get(id);
 
                      if (!script) {
-                            return await streamer.notFound(request, response);
+                            return await ScriptStreamService.NOT_FOUND(
+                                   request,
+                                   response,
+                            );
                      }
 
-                     let path: string =
-                            script.path ?? join(script.root, script.file);
+                     let path: string;
 
                      if (resourceRequest) {
-                            path = join(
-                                   script.root,
-                                   resourceRequest ? url : script.file,
+                            const resourceFile: string = url.replace(
+                                   `/${GLOBAL_SCRIPTS_URI}/`,
+                                   "",
                             );
+
+                            path = join(script.root, resourceFile);
+
                             response.header(
                                    "Content-Type",
-                                   mime.lookup(url) ||
+                                   mime.lookup(resourceFile) ||
                                           "application/octet-stream",
                             );
+                     } else {
+                            path =
+                                   script.path ??
+                                   join(script.root, script.file);
                      }
 
                      return await streamer.stream(
