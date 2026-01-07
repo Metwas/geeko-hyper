@@ -36,8 +36,9 @@ import { resolve } from "node:path";
  * @type {Script}
  */
 export const DEFAULT_404_SCRIPT: Script = {
-       root: resolve(process.cwd(), "./assets/404/"),
+       root: resolve(__dirname, "../assets/scripts/core/404/"),
        shell: ScriptShell.WEB,
-       file: "404.html",
+       file: "index.html",
+       inject: false,
        id: "404",
 };

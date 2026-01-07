@@ -24,25 +24,14 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import {
-       IFRAME_URL_REGEX,
-       SCRIPT_ID_REGEX,
-       GLOBAL_ROOT_URI,
-       GLOBAL_SCRIPTS_URI,
-} from "../../global/scripts/paths";
-
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
+import { GLOBAL_ROOT_URI } from "../../global/scripts/paths";
 import { Request, Response, Router } from "hyper-express";
-import { Get, Post, Delete } from "../decorators/RESTful";
 import { RouteOutlet } from "../decorators/RouteOutlet";
-import { extractKeyFromUrl } from "../../tools/text";
-import { JsonLike } from "@geeko/serialization";
-import { Script } from "../../types/Script";
+import { Get } from "../decorators/RESTful";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
-import { join } from "node:path";
-import mime from "mime-types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -72,7 +61,7 @@ export class CoreRouterOutlet extends RouterOutlet {
        }
 
        /**
-        * Streams the specified @see Script by id
+        * Streams the default dashboard @see ScriptStreamService.DEFAULT_PAGE
         *
         * @public
         * @param {Request} request
@@ -81,68 +70,6 @@ export class CoreRouterOutlet extends RouterOutlet {
         */
        @Get("/")
        public async get(request: Request, response: Response): Promise<void> {
-              if (!this.script) {
-                     this.logger?.debug("Invalid [GET] request");
-                     return await ScriptStreamService.ERROR(request, response);
-              }
-
-              const query: JsonLike = request.query;
-
-              let id: string | undefined = query?.id;
-              let url: string = request.url;
-              this.logger?.debug(`Root request [${url}]`);
-              let resourceRequest: boolean = false;
-
-              if (!id) {
-                     /** if no id was provided, check the @see referer header */
-                     const referer: string = request.headers["referer"] ?? url;
-                     id = extractKeyFromUrl(referer, GLOBAL_SCRIPTS_URI);
-
-                     this.logger?.debug(`Root script request [${id}]`);
-                     resourceRequest = true;
-              }
-
-              /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
-              url = url
-                     .replace(IFRAME_URL_REGEX, "")
-                     .replace(SCRIPT_ID_REGEX, "");
-
-              if (id) {
-                     const streamer: ScriptStreamService = this.script.stream;
-                     const script: Script | undefined = this.script.get(id);
-
-                     if (!script) {
-                            return await ScriptStreamService.NOT_FOUND(
-                                   request,
-                                   response,
-                            );
-                     }
-
-                     let path: string =
-                            script.path ?? join(script.root, script.file);
-
-                     if (resourceRequest) {
-                            path = join(
-                                   script.root,
-                                   resourceRequest ? url : script.file,
-                            );
-
-                            response.header(
-                                   "Content-Type",
-                                   mime.lookup(url) ||
-                                          "application/octet-stream",
-                            );
-                     }
-
-                     return await streamer.stream(
-                            path,
-                            script,
-                            request,
-                            response,
-                            !resourceRequest,
-                     );
-              }
-
-              return void 0;
+              return await ScriptStreamService.ERROR(request, response);
        }
 }

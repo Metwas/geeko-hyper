@@ -33,11 +33,10 @@ import {
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { Request, Response, Router } from "hyper-express";
-import { Get, Post, Delete } from "../decorators/RESTful";
 import { RouteOutlet } from "../decorators/RouteOutlet";
 import { extractKeyFromUrl } from "../../tools/text";
-import { JsonLike } from "@geeko/serialization";
 import { Script } from "../../types/Script";
+import { Get } from "../decorators/RESTful";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
 import { join } from "node:path";

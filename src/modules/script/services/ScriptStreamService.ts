@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { DEFAULT_ERROR_SCRIPT } from "../../../global/scripts/error";
 import { DEFAULT_404_SCRIPT } from "../../../global/scripts/404";
 import { ScriptInjectorService } from "./ScriptInjectorService";
 import { ReadStream, Stats, createReadStream } from "node:fs";
@@ -33,6 +34,7 @@ import { Request, Response } from "hyper-express";
 import { Script } from "../../../types/Script";
 import { getFsStat } from "../../../tools/fs";
 import { LogService } from "@geeko/log";
+import { join } from "node:path";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -125,6 +127,34 @@ export class ScriptStreamService {
        }
 
        /**
+        * Streams the default dashboard page
+        *
+        * @public
+        * @param {Request} request
+        * @param {Response} response
+        * @returns {Promise<void>}
+        */
+       public static async DEFAULT_PAGE(
+              request: Request,
+              response: Response,
+       ): Promise<void> {
+              const script: Script = DEFAULT_404_SCRIPT;
+
+              const path: string = join(script.root, script.file);
+              const stat: Stats | undefined = await getFsStat(path);
+
+              if (!stat?.isFile()) {
+                     // send 404 text if backup 404 script was not found.
+                     response.status(404).send("Not Found");
+              } else {
+                     const fsStream: ReadStream = createReadStream(path);
+                     return response.stream(fsStream);
+              }
+
+              return void 0;
+       }
+
+       /**
         * Streams the 404 'Not found' @see Script or text
         *
         * @public
@@ -138,7 +168,7 @@ export class ScriptStreamService {
        ): Promise<void> {
               const script: Script = DEFAULT_404_SCRIPT;
 
-              const path: string = script.root + script.file;
+              const path: string = join(script.root, script.file);
               const stat: Stats | undefined = await getFsStat(path);
 
               if (!stat?.isFile()) {
@@ -164,9 +194,9 @@ export class ScriptStreamService {
               request: Request,
               response: Response,
        ): Promise<void> {
-              const script: Script = DEFAULT_404_SCRIPT;
+              const script: Script = DEFAULT_ERROR_SCRIPT;
 
-              const path: string = script.root + script.file;
+              const path: string = join(script.root, script.file);
               const stat: Stats | undefined = await getFsStat(path);
 
               if (!stat?.isFile()) {
