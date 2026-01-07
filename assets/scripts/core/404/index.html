@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+       <head>
+              <meta charset="UTF-8" />
+              <meta
+                     name="viewport"
+                     content="width=device-width, initial-scale=1.0"
+              />
+              <title>404</title>
+       </head>
+       <body>
+              <style>
+                     * {
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
+                     }
+
+                     html,
+                     body {
+                            width: 100%;
+                            height: 100%;
+                            font-size: 2vw;
+                            font-family:
+                                   system-ui,
+                                   -apple-system,
+                                   BlinkMacSystemFont,
+                                   "Segoe UI",
+                                   Roboto,
+                                   Oxygen,
+                                   Ubuntu,
+                                   Cantarell,
+                                   "Open Sans",
+                                   "Helvetica Neue",
+                                   sans-serif;
+                     }
+
+                     body {
+                            background: radial-gradient(#333, #000);
+                            color: #fff;
+                     }
+
+                     canvas {
+                            width: 100%;
+                            height: 100%;
+                     }
+
+                     .container {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;
+                            width: 100%;
+                            height: 100%;
+                     }
+
+                     h1 {
+                            margin-bottom: 90px;
+                            font-size: 0.8rem;
+                     }
+
+                     svg {
+                            color: #fff;
+                            width: 15rem;
+                            margin: 0 auto;
+                     }
+
+                     @media screen and (max-width: 1000px) {
+                            h1 {
+                                   font-size: 1.2rem;
+                                   margin-bottom: 60px;
+                            }
+                     }
+
+                     @media screen and (max-width: 800px) {
+                            h1 {
+                                   font-size: 1.5rem;
+                                   margin-bottom: 30px;
+                            }
+                     }
+              </style>
+              <canvas id="base-canvas"></canvas>
+              <div class="container">
+                     <h1>Page was not found</h1>
+                     <div class="center">
+                            <svg
+                                   viewBox="0 0 408 166"
+                                   fill="none"
+                                   xmlns="http://www.w3.org/2000/svg"
+                            >
+                                   <path
+                                          d="M287.09 131.383V111.785L356.466 2.19458H371.909V31.0424H362.11L312.489 109.59V110.844H407.577V131.383H287.09ZM363.208 162.739V125.425L363.365 116.488V2.19458H386.333V162.739H363.208Z"
+                                          fill="currentColor"
+                                   ></path>
+                                   <path
+                                          d="M203.698 165.404C191.313 165.352 180.73 162.086 171.95 155.605C163.17 149.125 156.455 139.692 151.804 127.306C147.153 114.921 144.827 100 144.827 82.5452C144.827 65.1425 147.153 50.2744 151.804 37.9409C156.507 25.6074 163.249 16.2005 172.029 9.72022C180.861 3.23991 191.417 -0.000244141 203.698 -0.000244141C215.98 -0.000244141 226.51 3.26604 235.29 9.7986C244.07 16.2789 250.785 25.6858 255.436 38.0193C260.14 50.3005 262.491 65.1425 262.491 82.5452C262.491 100.053 260.166 114.999 255.515 127.385C250.863 139.718 244.148 149.151 235.368 155.684C226.588 162.164 216.032 165.404 203.698 165.404ZM203.698 144.474C214.569 144.474 223.061 139.17 229.175 128.561C235.342 117.952 238.425 102.613 238.425 82.5452C238.425 69.2188 237.014 57.9567 234.192 48.7588C231.423 39.5087 227.425 32.5058 222.199 27.7501C217.025 22.9421 210.858 20.5381 203.698 20.5381C192.88 20.5381 184.388 25.8687 178.221 36.5299C172.055 47.191 168.945 62.5295 168.893 82.5452C168.893 95.9239 170.278 107.238 173.048 116.488C175.87 125.686 179.868 132.663 185.041 137.419C190.215 142.122 196.434 144.474 203.698 144.474Z"
+                                          fill="currentColor"
+                                   ></path>
+                                   <path
+                                          d="M0 131.383V111.785L69.3758 2.19458H84.8188V31.0424H75.02L25.3986 109.59V110.844H120.487V131.383H0ZM76.1174 162.739V125.425L76.2742 116.488V2.19458H99.2427V162.739H76.1174Z"
+                                          fill="currentColor"
+                                   ></path>
+                            </svg>
+                     </div>
+              </div>
+              <script type="text/javascript">
+                     let canvas = void 0;
+                     let context = void 0;
+                     let border = 1;
+                     let scaleX = 0;
+                     let scaleY = 0;
+                     let shift = 0;
+                     let up = true;
+                     let max = 1.2;
+                     let t = 0;
+
+                     let resolution = 50;
+
+                     function lerp(x0, x1, t) {
+                            return (1 - t) * x0 + t * x1;
+                     }
+
+                     function animate(time) {
+                            if (!up && shift >= max) {
+                                   up = true;
+                            }
+
+                            if (up && shift <= -max) {
+                                   up = false;
+                            }
+
+                            if (up) {
+                                   shift = shift - 0.005;
+                            } else {
+                                   shift = shift + 0.005;
+                            }
+
+                            grid(canvas, context, time);
+                            requestAnimationFrame(animate);
+                     }
+
+                     function resizeCanvas(canvas, context) {
+                            const dpr = window.devicePixelRatio || 1;
+
+                            const width = window.innerWidth;
+                            const height = window.innerHeight;
+
+                            canvas.style.width = width + "px";
+                            canvas.style.height = height + "px";
+
+                            canvas.width = Math.floor(width * dpr);
+                            canvas.height = Math.floor(height * dpr);
+
+                            context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                            scaleX = Math.round(width / resolution);
+                            scaleY = Math.round(height / resolution);
+                     }
+
+                     function grid(canvas, context, time) {
+                            const dpr = window.devicePixelRatio || 1;
+                            const width = canvas.width / dpr - border * 2;
+                            const height = canvas.height / dpr - border * 2;
+
+                            const cellW = width / scaleX;
+                            const cellH = height / scaleY;
+
+                            const borderHalf = border / 2;
+
+                            context.clearRect(0, 0, width, height);
+
+                            for (let y = 0; y < scaleY; y++) {
+                                   for (let x = 0; x < scaleX; x++) {
+                                          context.fillStyle = `hsl(${x + y + 140}, 70%, ${shift * x + y}%)`;
+                                          context.fillRect(
+                                                 x * cellW + borderHalf,
+                                                 y * cellH + borderHalf,
+                                                 cellW - borderHalf,
+                                                 cellH - borderHalf,
+                                          );
+                                   }
+                            }
+                     }
+
+                     window.onload = function () {
+                            canvas = document.getElementById("base-canvas");
+                            context = canvas.getContext("2d");
+
+                            resizeCanvas(canvas, context);
+                            requestAnimationFrame(animate);
+                     };
+
+                     window.onresize = function () {
+                            if (canvas && context) {
+                                   resizeCanvas(canvas, context);
+                            }
+                     };
+              </script>
+       </body>
+</html>
