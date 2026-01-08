@@ -49,7 +49,6 @@ export function RouteOutlet(
               },
               {
                      injectable: true,
-                     token: uri,
               },
        );
 }
