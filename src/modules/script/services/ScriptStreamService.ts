@@ -172,7 +172,6 @@ export class ScriptStreamService {
               const stat: Stats | undefined = await getFsStat(path);
 
               if (!stat?.isFile()) {
-                     // send 404 text if backup 404 script was not found.
                      response.status(404).send("Not Found");
               } else {
                      const fsStream: ReadStream = createReadStream(path);
@@ -200,7 +199,6 @@ export class ScriptStreamService {
               const stat: Stats | undefined = await getFsStat(path);
 
               if (!stat?.isFile()) {
-                     // send 404 text if backup 404 script was not found.
                      response.status(500).send("Something went wrong");
               } else {
                      const fsStream: ReadStream = createReadStream(path);

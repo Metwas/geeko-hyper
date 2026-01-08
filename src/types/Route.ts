@@ -24,7 +24,8 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { Request, Response, Websocket } from "hyper-express";
+import { RouteHandler } from "./RouteHandler";
+import { Websocket } from "hyper-express";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -54,8 +55,8 @@ export type WebsocketRoute = RouteOptions & {
  * @public
  */
 export type HttpRoute = RouteOptions & {
-       handler: (request: Request, response: Response) => void;
        method: "GET" | "POST" | "PUT" | "DELETE" | "TRACE";
+       handler: RouteHandler;
 };
 
 /**

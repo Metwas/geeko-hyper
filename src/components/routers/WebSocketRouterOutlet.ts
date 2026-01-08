@@ -53,28 +53,26 @@ export class WebSocketRouterOutlet extends RouterOutlet {
               router?: Router,
        ) {
               super(router);
-
-              this.addRoute({
-                     path: "/connect",
-                     method: "WS",
-                     handler: (socket: Websocket) => {
-                            logger?.info("Websocket client connected: ");
-
-                            socket.on("message", (message: string) => {
-                                   logger?.info(message);
-                            });
-
-                            socket.on("close", () => {
-                                   logger?.warn(
-                                          `WS Client ${socket.ip} closed`,
-                                   );
-                            });
-                     },
-              });
        }
 
+       /**
+        * Websocket client connect handler
+        *
+        * @public
+        * @param {Websocket} socket
+        */
        @Ws("connect")
        public connect(socket: Websocket): void {
-              console.log("Websocket client connected: ", socket);
+              this.logger?.verbose(`Websocket client [${socket.ip}] connected`);
+
+              socket.on("message", (message: string) => {
+                     this.logger?.debug(message);
+              });
+
+              socket.on("close", (code: number, reason: ArrayBuffer) => {
+                     this.logger?.verbose(
+                            `Websocket client [${socket.ip}] closed, reason [${(reason && Buffer.from(reason).toString("utf-8")) || "Client Disconnection"}] code [${code}]`,
+                     );
+              });
        }
 }

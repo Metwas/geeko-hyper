@@ -25,9 +25,10 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import {
-       GLOBAL_LOG_PROVIDER,
        GLOBAL_ROUTE_OUTLETS,
+       GLOBAL_LOG_PROVIDER,
        ROUTE_OUTLET_TOKEN,
+       ROUTE_API_TOKEN,
 } from "./inject.tokens";
 
 import { WebSocketRouterOutlet } from "../../components/routers/WebSocketRouterOutlet";
@@ -36,6 +37,7 @@ import { CoreRouterOutlet } from "../../components/routers/CoreRouterOutlet";
 import { ScriptService } from "../../modules/script/services/ScriptService";
 import { RouterOutlet } from "../../components/routers/Router";
 import { ModuleWrapper, Reflector, Type } from "@geeko/meta";
+import { RouteHandler } from "../../types/RouteHandler";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";
 
@@ -74,7 +76,14 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                             Reflector.getWrapperFor(ROUTE_OUTLET_TOKEN);
 
                      if (wrappers) {
+                            const apis: Array<any> | undefined =
+                                   Reflector.getFor(ROUTE_API_TOKEN, {
+                                          isProperty: true,
+                                   });
+
                             const length: number = wrappers?.length ?? 0;
+                            const alength: number = apis?.length ?? 0;
+                            let aindex: number = 0;
                             let index: number = 0;
 
                             for (; index < length; ++index) {
@@ -99,6 +108,60 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                                                  new target(script, logger);
 
                                           instance.name(metadata.path);
+
+                                          if (apis) {
+                                                 for (
+                                                        ;
+                                                        aindex < alength;
+                                                        ++aindex
+                                                 ) {
+                                                        const api: any =
+                                                               apis[aindex];
+
+                                                        const name:
+                                                               | string
+                                                               | undefined =
+                                                               api.target?.name;
+
+                                                        if (
+                                                               typeof api.key !==
+                                                                      "string" ||
+                                                               typeof name !==
+                                                                      "string" ||
+                                                               name !==
+                                                                      target.name
+                                                        ) {
+                                                               continue;
+                                                        }
+
+                                                        const handler: RouteHandler =
+                                                               instance[
+                                                                      api.key
+                                                               ];
+
+                                                        if (
+                                                               typeof handler !==
+                                                               "function"
+                                                        ) {
+                                                               continue;
+                                                        }
+
+                                                        const metadata: any =
+                                                               api.metadata;
+
+                                                        /** Register route with the provided metadata */
+                                                        instance.addRoute({
+                                                               method: metadata.method,
+                                                               path: metadata.path,
+                                                               handler: handler.bind(
+                                                                      instance,
+                                                               ),
+                                                        });
+                                                 }
+
+                                                 aindex = 0;
+                                          }
+
                                           routes.push(instance);
 
                                           logger.debug(

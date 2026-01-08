@@ -52,7 +52,7 @@ export const GLOBAL_SCRIPTS_URI: string = "scripts";
  * @public
  * @type {String}
  */
-export const GLOBAL_WEBSOCKET_URI: string = "ws";
+export const GLOBAL_WEBSOCKET_URI: string = "/";
 
 /**
  * Application root URI

@@ -61,12 +61,6 @@ export class ScriptRouterOutlet extends RouterOutlet {
               router?: Router,
        ) {
               super(router);
-
-              this.addRoute({
-                     path: `/:id`,
-                     method: "GET",
-                     handler: this.get.bind(this),
-              });
        }
 
        /**
