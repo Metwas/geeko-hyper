@@ -52,12 +52,6 @@ export class CoreRouterOutlet extends RouterOutlet {
               router?: Router,
        ) {
               super(router);
-
-              this.addRoute({
-                     path: "/",
-                     method: "GET",
-                     handler: this.get.bind(this),
-              });
        }
 
        /**
@@ -68,7 +62,7 @@ export class CoreRouterOutlet extends RouterOutlet {
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       @Get("/")
+       @Get("*")
        public async get(request: Request, response: Response): Promise<void> {
               return await ScriptStreamService.ERROR(request, response);
        }
