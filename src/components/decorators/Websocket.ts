@@ -24,8 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { ROUTE_WS_TOKEN } from "../../global/injector/inject.tokens";
-import { CustomDecorator, SetMetadata } from "@nestjs/common";
+import { ROUTE_API_TOKEN } from "../../global/injector/inject.tokens";
+import { RouteApiTypes } from "../../types/RouteApiTypes";
+import { SetPropertyMetadata } from "@geeko/meta";
 import { WSRouteOptions } from "hyper-express";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -36,15 +37,15 @@ import { WSRouteOptions } from "hyper-express";
  * @public
  * @param {String} uri
  * @param {RouteOptions} options
- * @returns {CustomDecorator}
+ * @returns {PropertyDecorator}
  */
 export function Ws(
        uri?: string | undefined,
        options?: WSRouteOptions,
-): CustomDecorator {
-       return SetMetadata(ROUTE_WS_TOKEN, {
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.WS,
               options: options,
-              method: "WS",
               path: uri,
        });
 }

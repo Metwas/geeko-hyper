@@ -24,12 +24,9 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import {
-       ROUTE_DELETE_TOKEN,
-       ROUTE_GET_TOKEN,
-       ROUTE_POST_TOKEN,
-} from "../../global/injector/inject.tokens";
-import { CustomDecorator, SetMetadata } from "@nestjs/common";
+import { ROUTE_API_TOKEN } from "../../global/injector/inject.tokens";
+import { RouteApiTypes } from "../../types/RouteApiTypes";
+import { SetPropertyMetadata } from "@geeko/meta";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -39,12 +36,15 @@ import { CustomDecorator, SetMetadata } from "@nestjs/common";
  * @public
  * @param {String} uri
  * @param {Object} options
- * @returns {CustomDecorator}
+ * @returns {PropertyDecorator}
  */
-export function Get(uri?: string | undefined, options?: any): CustomDecorator {
-       return SetMetadata(ROUTE_GET_TOKEN, {
+export function Get(
+       uri?: string | undefined,
+       options?: any,
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.GET,
               options: options,
-              method: "GET",
               path: uri,
        });
 }
@@ -55,12 +55,15 @@ export function Get(uri?: string | undefined, options?: any): CustomDecorator {
  * @public
  * @param {String} uri
  * @param {Object} options
- * @returns {CustomDecorator}
+ * @returns {PropertyDecorator}
  */
-export function Post(uri?: string | undefined, options?: any): CustomDecorator {
-       return SetMetadata(ROUTE_POST_TOKEN, {
+export function Post(
+       uri?: string | undefined,
+       options?: any,
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.POST,
               options: options,
-              method: "POST",
               path: uri,
        });
 }
@@ -71,15 +74,53 @@ export function Post(uri?: string | undefined, options?: any): CustomDecorator {
  * @public
  * @param {String} uri
  * @param {Object} options
- * @returns {CustomDecorator}
+ * @returns {PropertyDecorator}
  */
 export function Delete(
        uri?: string | undefined,
        options?: any,
-): CustomDecorator {
-       return SetMetadata(ROUTE_DELETE_TOKEN, {
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.DELETE,
               options: options,
-              method: "DELETE",
+              path: uri,
+       });
+}
+
+/**
+ * @see RouterOutlet RESTful UPDATE method decorator
+ *
+ * @public
+ * @param {String} uri
+ * @param {Object} options
+ * @returns {PropertyDecorator}
+ */
+export function Update(
+       uri?: string | undefined,
+       options?: any,
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.UPDATE,
+              options: options,
+              path: uri,
+       });
+}
+
+/**
+ * @see RouterOutlet RESTful TRACE method decorator
+ *
+ * @public
+ * @param {String} uri
+ * @param {Object} options
+ * @returns {PropertyDecorator}
+ */
+export function Trace(
+       uri?: string | undefined,
+       options?: any,
+): PropertyDecorator {
+       return SetPropertyMetadata(ROUTE_API_TOKEN, {
+              method: RouteApiTypes.TRACE,
+              options: options,
               path: uri,
        });
 }
