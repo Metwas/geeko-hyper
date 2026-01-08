@@ -24,12 +24,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { IScriptSourceProvider } from "../../modules/script/interfaces/IScriptSourceProvider";
-import { DefaultSourceProvider } from "../../modules/script/interfaces/DefaultSourceProvider";
 import {
        GLOBAL_CONFIGURATION_PROVIDER,
        GLOBAL_LOG_PROVIDER,
 } from "./inject.tokens";
+
+import { IScriptSourceProvider } from "../../modules/script/interfaces/IScriptSourceProvider";
+import { DefaultSourceProvider } from "../../modules/script/interfaces/DefaultSourceProvider";
 import { ConfigurationService } from "@geeko/configuration";
 import { SCRIPT_SOURCE_PROVIDER } from "./script.tokens";
 import { Provider } from "@nestjs/common";
