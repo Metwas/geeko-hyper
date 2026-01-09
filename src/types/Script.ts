@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { InjectOptions } from "./InjectOptions";
+import { HttpStatus } from "@nestjs/common";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -49,6 +50,11 @@ export enum ScriptState {
        ALARM,
        ERROR,
 }
+
+/**
+ * @public
+ */
+export type ScriptStatusCode = HttpStatus;
 
 /**
  * Core script interface options
@@ -119,6 +125,14 @@ export type Script = {
         * @type {String}
         */
        status?: string;
+
+       /**
+        * Script status code similar to the HttpStatus
+        *
+        * @public
+        * @type {ScriptStatusCode}
+        */
+       code?: ScriptStatusCode;
 
        /**
         * Flag to allow for automatic code injection from the core API @see HttpScriptService

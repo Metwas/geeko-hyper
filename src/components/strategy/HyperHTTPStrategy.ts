@@ -146,6 +146,7 @@ export class HyperExpressStrategy
               this.log.verbose(
                      `Closing HTTP server [port] ${this._server?.port}`,
               );
+
               this._server?.close();
        }
 
