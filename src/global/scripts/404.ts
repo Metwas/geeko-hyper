@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { Script, ScriptShell } from "../../types/Script";
+import { HttpStatus } from "@nestjs/common";
 import { resolve } from "node:path";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -37,7 +38,9 @@ import { resolve } from "node:path";
  */
 export const DEFAULT_404_SCRIPT: Script = {
        root: resolve(__dirname, "../assets/scripts/core/404/"),
+       code: HttpStatus.NOT_FOUND,
        shell: ScriptShell.WEB,
+       status: "Not found",
        file: "index.html",
        inject: false,
        id: "404",

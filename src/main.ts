@@ -26,8 +26,8 @@
 
 import {
        GLOBAL_CONFIGURATION_PROVIDER,
-       GLOBAL_LOG_PROVIDER,
        GLOBAL_ROUTE_OUTLETS,
+       GLOBAL_LOG_PROVIDER,
        HYPER_CTOR_OPTIONS,
 } from "./global/injector/inject.tokens";
 

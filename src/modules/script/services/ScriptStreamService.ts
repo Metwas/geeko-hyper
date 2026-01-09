@@ -114,6 +114,7 @@ export class ScriptStreamService {
                      this.logger?.debug(
                             `Inject script [${path}] source [${source.length}]`,
                      );
+
                      return injectStream(
                             path,
                             needle as Buffer,
@@ -166,19 +167,7 @@ export class ScriptStreamService {
               request: Request,
               response: Response,
        ): Promise<void> {
-              const script: Script = DEFAULT_404_SCRIPT;
-
-              const path: string = join(script.root, script.file);
-              const stat: Stats | undefined = await getFsStat(path);
-
-              if (!stat?.isFile()) {
-                     response.status(404).send("Not Found");
-              } else {
-                     const fsStream: ReadStream = createReadStream(path);
-                     return response.stream(fsStream);
-              }
-
-              return void 0;
+              return streamStatusScript(DEFAULT_404_SCRIPT, response);
        }
 
        /**
@@ -193,18 +182,35 @@ export class ScriptStreamService {
               request: Request,
               response: Response,
        ): Promise<void> {
-              const script: Script = DEFAULT_ERROR_SCRIPT;
-
-              const path: string = join(script.root, script.file);
-              const stat: Stats | undefined = await getFsStat(path);
-
-              if (!stat?.isFile()) {
-                     response.status(500).send("Something went wrong");
-              } else {
-                     const fsStream: ReadStream = createReadStream(path);
-                     return response.stream(fsStream);
-              }
-
-              return void 0;
+              return streamStatusScript(DEFAULT_ERROR_SCRIPT, response);
        }
+}
+
+/**
+ * Helper for streaming default status messages and scripts
+ *
+ * @private
+ * @param {Script} script
+ * @param {Response} response
+ * @param {String} message
+ * @returns {Promise<void>}
+ */
+async function streamStatusScript(
+       script: Script,
+       response: Response,
+       message?: string,
+): Promise<void> {
+       const path: string = join(script.root, script.file);
+       const stat: Stats | undefined = await getFsStat(path);
+
+       if (!stat?.isFile()) {
+              response
+                     .status(script.code ?? 200)
+                     .send(message ?? script.status);
+       } else {
+              const fsStream: ReadStream = createReadStream(path);
+              return response.stream(fsStream);
+       }
+
+       return void 0;
 }

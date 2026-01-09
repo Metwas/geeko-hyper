@@ -25,6 +25,7 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { Script, ScriptShell } from "../../types/Script";
+import { HttpStatus } from "@nestjs/common";
 import { resolve } from "node:path";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-          _-_-_-_-_-_-_-_-_-_-_-_-_-*/
@@ -37,6 +38,8 @@ import { resolve } from "node:path";
  */
 export const DEFAULT_ERROR_SCRIPT: Script = {
        root: resolve(__dirname, "../assets/scripts/core/error/"),
+       code: HttpStatus.INTERNAL_SERVER_ERROR,
+       status: "Something went wrong",
        shell: ScriptShell.WEB,
        file: "index.html",
        inject: false,
