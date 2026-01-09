@@ -48,7 +48,7 @@ export class WebSocketRouterOutlet extends RouterOutlet {
         * @param {Router} router
         */
        public constructor(
-              public script?: ScriptService,
+              public script: ScriptService,
               public logger?: LogService,
               router?: Router,
        ) {

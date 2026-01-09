@@ -29,10 +29,12 @@ import {
        SCRIPT_COLLECTOR_TOKEN,
        SCRIPT_CONFIGURATION_KEY,
 } from "./script.tokens";
+
 import {
        GLOBAL_CONFIGURATION_PROVIDER,
        GLOBAL_LOG_PROVIDER,
 } from "./inject.tokens";
+
 import { ScriptCollection } from "../../modules/script/services/ScriptCollection";
 import { ScriptWatchOptions } from "../../types/ScriptConfigurationOptions";
 import { ConfigurationService } from "@geeko/configuration";

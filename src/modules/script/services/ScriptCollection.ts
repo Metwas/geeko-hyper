@@ -36,10 +36,12 @@ import {
        extension,
        filename,
 } from "@geeko/os";
+
 import {
        SCRIPT_ENTRY_NAME,
        SCRIPT_MANIFEST,
 } from "../../../global/injector/script.tokens";
+
 import { Script, ScriptShell } from "../../../types/Script";
 import { isAbsolute, join, resolve, sep } from "node:path";
 import { getFilesInDirectory } from "@geeko/configuration";
@@ -225,8 +227,9 @@ export class ScriptCollection extends Collection<Script, string> {
 
                                    if (this.has(script.id) === false) {
                                           this.log?.verbose(
-                                                 `Added script [${script.id}] path [${script.file}]`,
+                                                 `Added script [${script.id}] path [${script.path}]`,
                                           );
+
                                           this.add(script.id, script);
                                    }
                             }
@@ -294,6 +297,7 @@ export class ScriptCollection extends Collection<Script, string> {
                                                         .split(sep)
                                                         .slice(1)
                                                         .join(sep);
+
                                           const rootPath: string = file["path"]
                                                  .replace(`${sep}${name}`, "")
                                                  .replace(relativePaths, "");
@@ -334,6 +338,7 @@ export class ScriptCollection extends Collection<Script, string> {
                                           this.log?.debug(
                                                  `Removing script [${script.id}]`,
                                           );
+
                                           this.emit("stop", script);
                                           this.delete(name);
                                    }
