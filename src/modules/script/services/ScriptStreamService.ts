@@ -24,6 +24,7 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import { DEFAULT_DASHBOARD_SCRIPT } from "../../../global/scripts/dashboard";
 import { DEFAULT_ERROR_SCRIPT } from "../../../global/scripts/error";
 import { DEFAULT_404_SCRIPT } from "../../../global/scripts/404";
 import { ScriptInjectorService } from "./ScriptInjectorService";
@@ -128,31 +129,18 @@ export class ScriptStreamService {
        }
 
        /**
-        * Streams the default dashboard page
+        * Streams the default dashboard/home script
         *
         * @public
         * @param {Request} request
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       public static async DEFAULT_PAGE(
+       public static async HOME(
               request: Request,
               response: Response,
        ): Promise<void> {
-              const script: Script = DEFAULT_404_SCRIPT;
-
-              const path: string = join(script.root, script.file);
-              const stat: Stats | undefined = await getFsStat(path);
-
-              if (!stat?.isFile()) {
-                     // send 404 text if backup 404 script was not found.
-                     response.status(404).send("Not Found");
-              } else {
-                     const fsStream: ReadStream = createReadStream(path);
-                     return response.stream(fsStream);
-              }
-
-              return void 0;
+              return streamStatusScript(DEFAULT_DASHBOARD_SCRIPT, response);
        }
 
        /**
@@ -206,7 +194,7 @@ async function streamStatusScript(
        if (!stat?.isFile()) {
               response
                      .status(script.code ?? 200)
-                     .send(message ?? script.status);
+                     .send(message ?? script.status ?? "OK");
        } else {
               const fsStream: ReadStream = createReadStream(path);
               return response.stream(fsStream);

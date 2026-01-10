@@ -64,6 +64,6 @@ export class CoreRouterOutlet extends RouterOutlet {
         */
        @Get("*")
        public async get(request: Request, response: Response): Promise<void> {
-              return await ScriptStreamService.ERROR(request, response);
+              return await ScriptStreamService.HOME(request, response);
        }
 }

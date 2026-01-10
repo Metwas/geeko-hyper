@@ -148,6 +148,7 @@ export class ScriptCollection extends Collection<Script, string> {
                                    this.log?.verbose(
                                           `Watching script path [${path}]`,
                                    );
+
                                    this._detector?.watch({ path });
                             }
                      }
