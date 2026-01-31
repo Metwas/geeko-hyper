@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+       <head>
+              <meta charset="UTF-8" />
+              <meta
+                     name="viewport"
+                     content="width=device-width, initial-scale=1.0"
+              />
+              <title>Error</title>
+       </head>
+       <body>
+              <style>
+                     * {
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
+                     }
+
+                     html,
+                     body {
+                            width: 100%;
+                            height: 100%;
+                            font-size: 2vw;
+                            font-family:
+                                   system-ui,
+                                   -apple-system,
+                                   BlinkMacSystemFont,
+                                   "Segoe UI",
+                                   Roboto,
+                                   Oxygen,
+                                   Ubuntu,
+                                   Cantarell,
+                                   "Open Sans",
+                                   "Helvetica Neue",
+                                   sans-serif;
+                     }
+
+                     body {
+                            background: radial-gradient(#333, #000);
+                            color: #fff;
+                     }
+
+                     canvas {
+                            width: 100%;
+                            height: 100%;
+                     }
+
+                     .container {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;
+                            width: 100%;
+                            height: 100%;
+                     }
+
+                     h1 {
+                            color: #ff001188;
+                            font-size: 15vw;
+                            font-family:
+                                   Impact, Haettenschweiler,
+                                   "Arial Narrow Bold", sans-serif;
+                            letter-spacing: 1rem;
+                            margin: 0 auto;
+                     }
+
+                     p {
+                            color: #ffffff33;
+                            font-size: 1.2vw;
+                     }
+              </style>
+              <div class="container">
+                     <p>Something went wrong</p>
+                     <br />
+                     <div class="center">
+                            <h1>500</h1>
+                     </div>
+              </div>
+              <canvas id="base-canvas"></canvas>
+              <script type="text/javascript">
+                     let canvas = void 0;
+                     let context = void 0;
+                     let border = 0;
+                     let scaleX = 0;
+                     let scaleY = 0;
+                     let shift = 0;
+                     let up = true;
+                     let max = 1.2;
+                     let t = 0;
+
+                     let resolution = 50;
+
+                     function lerp(x0, x1, t) {
+                            return (1 - t) * x0 + t * x1;
+                     }
+
+                     function animate(time) {
+                            if (!up && shift >= max) {
+                                   up = true;
+                            }
+
+                            if (up && shift <= -max) {
+                                   up = false;
+                            }
+
+                            if (up) {
+                                   shift = shift - 0.005;
+                            } else {
+                                   shift = shift + 0.005;
+                            }
+
+                            grid(canvas, context, time);
+                            requestAnimationFrame(animate);
+                     }
+
+                     function resizeCanvas(canvas, context) {
+                            const dpr = window.devicePixelRatio || 1;
+
+                            const width = window.innerWidth;
+                            const height = window.innerHeight;
+
+                            canvas.style.width = width + "px";
+                            canvas.style.height = height + "px";
+
+                            canvas.width = Math.floor(width * dpr);
+                            canvas.height = Math.floor(height * dpr);
+
+                            context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                            scaleX = Math.round(width / resolution);
+                            scaleY = Math.round(height / resolution);
+                     }
+
+                     function grid(canvas, context, time) {
+                            const dpr = window.devicePixelRatio || 1;
+                            const width = canvas.width / dpr - border * 2;
+                            const height = canvas.height / dpr - border * 2;
+
+                            const cellW = width / scaleX;
+                            const cellH = height / scaleY;
+
+                            const borderHalf = border > 0 ? border / 2 : 0;
+
+                            context.clearRect(0, 0, width, height);
+
+                            for (let y = 0; y < scaleY; y++) {
+                                   for (let x = 0; x < scaleX; x++) {
+                                          context.fillStyle = `hsl(${5}, 70%, ${shift * x + y}%)`;
+                                          context.fillRect(
+                                                 x * cellW + borderHalf,
+                                                 y * cellH + borderHalf,
+                                                 cellW - borderHalf,
+                                                 cellH - borderHalf,
+                                          );
+                                   }
+                            }
+                     }
+
+                     window.onload = function () {
+                            canvas = document.getElementById("base-canvas");
+                            context = canvas.getContext("2d");
+
+                            resizeCanvas(canvas, context);
+                            requestAnimationFrame(animate);
+                     };
+
+                     window.onresize = function () {
+                            if (canvas && context) {
+                                   resizeCanvas(canvas, context);
+                            }
+                     };
+              </script>
+       </body>
+</html>

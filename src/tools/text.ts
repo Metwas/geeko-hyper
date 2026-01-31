@@ -1,30 +1,23 @@
 /**
-     MIT License
-
-     @Copyright (c) Metwas
-
-     Permission is hereby granted, free of charge, to any person obtaining a copy
-     of this software and associated documentation files (the "Software"), to deal
-     in the Software without restriction, including without limitation the rights
-     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     copies of the Software, and to permit persons to whom the Software is
-     furnished to do so, subject to the following conditions:
-
-     The above Copyright notice and this permission notice shall be included in all
-     copies or substantial portions of the Software.
-
-     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     AUTHORS OR Copyright HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     SOFTWARE.
-*/
+ * Copyright (c) Metwas
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**
  * @see RegExp for matching non alphabet & decimal charactors
- * 
+ *
  * @public
  * @type {String}
  */
@@ -32,23 +25,23 @@ export const NON_CHAR_REG: RegExp = /[^a-z-A-Z\d]/g;
 
 /**
  * Attempts to extract the specified @see String key from the provided @see String url
- * 
+ *
  * @public
- * @param {String} url 
+ * @param {String} url
  * @param {String} key
  * @returns {String}
  */
-export const extractKeyFromUrl = ( url: string, key: string ): string | undefined =>
-{
-       if ( typeof url !== "string" || !url || typeof key !== "string" || !key )
-       {
+export const extractKeyFromUrl = (
+       url: string,
+       key: string,
+): string | undefined => {
+       if (typeof url !== "string" || !url || typeof key !== "string" || !key) {
               return void 0;
        }
 
-       let index: number = url.indexOf( key );
+       let index: number = url.indexOf(key);
 
-       if ( index === -1 )
-       {
+       if (index === -1) {
               return void 0;
        }
 
@@ -56,13 +49,11 @@ export const extractKeyFromUrl = ( url: string, key: string ): string | undefine
        const length: number = url.length;
        let value: string = "";
 
-       for ( ; index < length; ++index )
-       {
-              const char: string = url[ index ];
-              const matches: RegExpMatchArray | null = char.match( NON_CHAR_REG );
+       for (; index < length; ++index) {
+              const char: string = url[index];
+              const matches: RegExpMatchArray | null = char.match(NON_CHAR_REG);
 
-              if ( matches && matches.length > 0 )
-              {
+              if (matches && matches.length > 0) {
                      break;
               }
 

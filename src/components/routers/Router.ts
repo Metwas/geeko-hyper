@@ -1,26 +1,19 @@
 /**
-     MIT License
-
-     @Copyright (c) Metwas
-
-     Permission is hereby granted, free of charge, to any person obtaining a copy
-     of this software and associated documentation files (the "Software"), to deal
-     in the Software without restriction, including without limitation the rights
-     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     copies of the Software, and to permit persons to whom the Software is
-     furnished to do so, subject to the following conditions:
-
-     The above Copyright notice and this permission notice shall be included in all
-     copies or substantial portions of the Software.
-
-     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     AUTHORS OR Copyright HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     SOFTWARE.
-*/
+ * Copyright (c) Metwas
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -31,14 +24,13 @@ import { Router } from "hyper-express";
 
 /**
  * Hyperexpress @see Router dyanmic route management interface
- * 
+ *
  * @public
  */
-export interface IRouterOutlet
-{
+export interface IRouterOutlet {
        /**
         * Gets the underlying Hyperexpress @see Router
-        * 
+        *
         * @public
         * @returns {Router}
         */
@@ -46,7 +38,7 @@ export interface IRouterOutlet
 
        /**
         * Gets the predefined @see Route references
-        * 
+        *
         * @public
         * @returns {Array<Route>}
         */
@@ -54,46 +46,41 @@ export interface IRouterOutlet
 
        /**
         * Adds the specified path and handler to this @see IRouterOutlet instance
-        * 
+        *
         * @public
         * @param {Route} route
         */
-       addRoute( route: Route ): void;
+       addRoute(route: Route): void;
 }
 
 /**
  * Hyperexpress @see Router dyanmic route management interface
- * 
+ *
  * @public
  */
-export abstract class RouterOutlet implements IRouterOutlet
-{
+export abstract class RouterOutlet implements IRouterOutlet {
        /**
         * Optionally provide a hyperexpress @see Router instance
-        * 
+        *
         * @public
-        * @param {String} tag
-        * @param {Router} router 
+        * @param {Router} router
         */
-       public constructor( tag?: string, router?: Router )
-       {
+       public constructor(router?: Router) {
               this._routes = new Map<string, Route>();
               this._router = router ?? new Router();
-
-              this.tag = tag;
        }
 
        /**
-        * Router prefix tag
-        * 
-        * @public
+        * Router name
+        *
+        * @protected
         * @type {String}
         */
-       public readonly tag: string | undefined = void 0;
+       protected _name: string = "";
 
        /**
-        * Optional Router version number 
-        * 
+        * Optional Router version number
+        *
         * @public
         * @type {String}
         */
@@ -101,7 +88,7 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Underlying @see HyperExpressServer Router instance
-        * 
+        *
         * @protected
         * @type {Router}
         */
@@ -109,66 +96,95 @@ export abstract class RouterOutlet implements IRouterOutlet
 
        /**
         * Underlying @see Route instances
-        * 
+        *
         * @protected
         * @type {Array<Route>}
         */
        protected _routes: Map<string, Route> | undefined = void 0;
 
        /**
+        * Router name
+        *
+        * @public
+        * @type {String}
+        */
+       public name(override?: string): string | undefined {
+              if (typeof override === "string") {
+                     this._name = override;
+              }
+
+              return this._name;
+       }
+
+       /**
         * Gets the underlying Hyperexpress @see Router
-        * 
+        *
         * @public
         * @returns {Router}
         */
-       public router(): Router | undefined
-       {
+       public router(): Router | undefined {
               return this._router;
        }
 
        /**
         * Gets the predefined @see Route references
-        * 
+        *
         * @public
         * @returns {Array<Route>}
         */
-       public getRoutes(): Array<Route> | undefined
-       {
-              return this._routes ? Array.from( this._routes?.values() ) : void 0;
+       public getRoutes(): Array<Route> | undefined {
+              return this._routes ? Array.from(this._routes?.values()) : void 0;
        }
 
        /**
         * Adds the specified path and handler to this @see IRouterOutlet instance
-        * 
+        *
         * @public
         * @param {Route} route
         * @param {WSRouteOptions | RouteOptions} options
         */
-       public addRoute( route: Route, options?: any ): void
-       {
-              if ( route && this._routes?.has( route.path ) === false )
-              {
-                     this._routes.set( route.path, route );
+       public addRoute(route: Route, options?: any): void {
+              if (route && this._routes?.has(route.path) === false) {
+                     this._routes.set(route.path, route);
                      /** Attach to the underlying @see Router */
-                     switch ( route.method )
-                     {
+                     switch (route.method) {
                             case "WS":
-                                   this._router?.ws( route.path, options, route.handler );
+                                   this._router?.ws(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "GET":
-                                   this._router?.get( route.path, options, route.handler );
+                                   this._router?.get(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "PUT":
                             case "POST":
-                                   this._router?.post( route.path, options, route.handler );
+                                   this._router?.post(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "DELETE":
-                                   this._router?.delete( route.path, options, route.handler );
+                                   this._router?.delete(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
                             case "TRACE":
-                                   this._router?.trace( route.path, options, route.handler );
+                                   this._router?.trace(
+                                          route.path,
+                                          options,
+                                          route.handler,
+                                   );
                                    break;
-                     };
+                     }
               }
        }
 }
