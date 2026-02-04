@@ -22,6 +22,7 @@ import { GLOBAL_LOG_PROVIDER } from "./inject.tokens";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";
 import { FsDetector } from "@geeko/os";
+import { cpus } from "node:os";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -35,8 +36,10 @@ export const injectScriptWatcher = (): Provider<FsDetector> => {
        return {
               provide: SCRIPT_WATCH_SERVICE,
               useFactory: async (logger: LogService): Promise<FsDetector> => {
-                     /** @ts-ignore */
-                     return new FsDetector(void 0, logger as any);
+                     return new FsDetector({
+                            workers: cpus().length / 2,
+                            logger: logger,
+                     });
               },
               inject: [GLOBAL_LOG_PROVIDER],
        };

@@ -21,6 +21,7 @@ import {
        GLOBAL_CONFIGURATION_PROVIDER,
        GLOBAL_LOG_PROVIDER,
 } from "./inject.tokens";
+
 import { ConfigurationService, FileProvider } from "@geeko/configuration";
 import { Provider } from "@nestjs/common";
 import { LogService } from "@geeko/log";

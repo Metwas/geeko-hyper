@@ -18,8 +18,8 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import { GLOBAL_LOG_PROVIDER } from "./inject.tokens";
-import { LogLevel, LogService } from "@geeko/log";
 import { Provider } from "@nestjs/common";
+import { LogService } from "@geeko/log";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -33,21 +33,7 @@ export const injectLogProvider = (): Provider<LogService> => {
        return {
               provide: GLOBAL_LOG_PROVIDER,
               useFactory: (): LogService => {
-                     const args: Array<string> = process.argv.slice(2);
-                     const verbose: boolean = args.indexOf("--verbose") > -1;
-                     const debug: boolean = args.indexOf("--debug") > -1;
-
-                     const env: string | undefined = process.env.NODE_ENV;
-
-                     let level: LogLevel = "info";
-
-                     if (debug || env === "development") {
-                            level = "debug";
-                     } else if (verbose) {
-                            level = "verbose";
-                     }
-
-                     return new LogService({ level: level });
+                     return new LogService({ title: "Hyper" });
               },
               inject: [],
        };

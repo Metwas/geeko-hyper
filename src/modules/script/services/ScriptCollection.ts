@@ -64,7 +64,6 @@ export class ScriptCollection extends Collection<Script, string> {
               if (!log) {
                      this.log = new LogService({
                             title: "Scripts",
-                            level: "info",
                      });
               }
 
@@ -146,7 +145,7 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this._onError(error as Error);
+                     this.log?.error(error as Error);
               }
        }
 
@@ -304,7 +303,7 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this._onError(error as Error);
+                     this.log?.error(error as Error);
               }
        }
 
@@ -353,28 +352,8 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this._onError(error as Error);
+                     this.log?.error(error as Error);
               }
-       }
-
-       /**
-        * Message handler/log
-        *
-        * @private
-        * @param {String} message
-        */
-       private _onMessage(message: string): void {
-              this.log?.verbose(message);
-       }
-
-       /**
-        * Error handler
-        *
-        * @private
-        * @param {Error | String} error
-        */
-       private _onError(error: Error | string): void {
-              this.log?.error(error);
        }
 
        /**
