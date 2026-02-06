@@ -17,14 +17,22 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import {
+       GLOBAL_SCRIPTS_URI,
+       GLOBAL_ROOT_URI,
+} from "../../global/scripts/paths";
+
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
-import { GLOBAL_ROOT_URI } from "../../global/scripts/paths";
+import { SCRIPT_COOKIE_TAG } from "../../global/constants";
 import { Request, Response, Router } from "hyper-express";
 import { RouteOutlet } from "../decorators/RouteOutlet";
 import { Get } from "../decorators/RESTful";
+import { Script } from "src/types/Script";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
+import { join } from "node:path";
+import mime from "mime-types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -57,6 +65,49 @@ export class CoreRouterOutlet extends RouterOutlet {
         */
        @Get("*")
        public async get(request: Request, response: Response): Promise<void> {
-              return await ScriptStreamService.HOME(request, response);
+              const url: string = request.url;
+              const id: string = request.cookies[SCRIPT_COOKIE_TAG];
+
+              if (id) {
+                     if (!this.script) {
+                            this.logger?.debug(
+                                   `Invalid [GET] request, url [${url}]`,
+                            );
+
+                            return await ScriptStreamService.ERROR(response);
+                     }
+
+                     const streamer: ScriptStreamService = this.script.stream;
+                     const script: Script | undefined = this.script.get(id);
+
+                     if (!script) {
+                            return await ScriptStreamService.NOT_FOUND(
+                                   response,
+                            );
+                     }
+
+                     const resourceFile: string = url.replace(
+                            `/${GLOBAL_SCRIPTS_URI}/`,
+                            "",
+                     );
+
+                     let path: string = join(script.root, resourceFile);
+
+                     response.header(
+                            "Content-Type",
+                            mime.lookup(resourceFile) ||
+                                   "application/octet-stream",
+                     );
+
+                     return await streamer.stream(
+                            path,
+                            script,
+                            request,
+                            response,
+                            false,
+                     );
+              }
+
+              return await ScriptStreamService.HOME(response);
        }
 }

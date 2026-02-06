@@ -18,12 +18,13 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import {
-       HTTP_REGEX_PATH,
-       SCRIPT_REPLACE_TAG,
-       SCRIPT_TAG_WRAPPER,
-       SOURCE_AUTH_TOKEN,
        INJECTOR_CONFIGURATION_KEY,
+       SCRIPT_TAG_BUFFER_BOTTOM,
+       SCRIPT_TAG_BUFFER_TOP,
+       SOURCE_AUTH_TOKEN,
+       HTTP_REGEX_PATH,
 } from "../../../global/injector/script.tokens";
+
 import { INJECTABLE_NEEDLE_BUFFER, decompress } from "../../../tools/stream";
 import { GithubReleaseOptions } from "../../../types/GithubReleaseOptions";
 import { IScriptSourceProvider } from "./IScriptSourceProvider";
@@ -239,19 +240,13 @@ export class DefaultSourceProvider implements IScriptSourceProvider {
         * @param {Boolean | String} wrap
         * @returns {Buffer}
         */
-       protected normalize(buffer: Buffer, wrap?: boolean | string): Buffer {
+       protected normalize(buffer: Buffer, wrap?: boolean): Buffer {
               if (wrap === true) {
-                     /** Get default @see script tag wrapper */
-                     wrap = SCRIPT_TAG_WRAPPER;
-              }
-
-              if (typeof wrap === "string") {
-                     const wrappers: Array<string> =
-                            wrap.split(SCRIPT_REPLACE_TAG);
-                     const top: Buffer = Buffer.from(wrappers[0]);
-                     const bottom: Buffer = Buffer.from(wrappers[1]);
-
-                     return Buffer.concat([top, buffer, bottom]);
+                     return Buffer.concat([
+                            SCRIPT_TAG_BUFFER_TOP,
+                            buffer,
+                            SCRIPT_TAG_BUFFER_BOTTOM,
+                     ]);
               }
 
               /** Simply return the raw @see Buffer if we got this far */

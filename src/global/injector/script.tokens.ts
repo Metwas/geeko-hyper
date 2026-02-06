@@ -96,20 +96,22 @@ export const SCRIPT_INJECTOR_TOKEN: string = "SCRIPT_INJECTOR_TOKEN";
 export const GIT_RELEASE_TAG: RegExp = /^release/g;
 
 /**
- * Script wrapper replacement tag
- *
- * @public
- * @type {String}
- */
-export const SCRIPT_REPLACE_TAG: string = "${{}}$";
-
-/**
  * Default HTML script wrapper, <script>
  *
  * @public
- * @type {String}
+ * @type {Buffer}
  */
-export const SCRIPT_TAG_WRAPPER: string = `<script type="text/javascript" defer>${SCRIPT_REPLACE_TAG}</script>`;
+export const SCRIPT_TAG_BUFFER_TOP: Buffer = Buffer.from(
+       '<script type="text/javascript" defer>',
+);
+
+/**
+ * Default HTML closing script wrapper, </script>
+ *
+ * @public
+ * @type {Buffer}
+ */
+export const SCRIPT_TAG_BUFFER_BOTTOM: Buffer = Buffer.from("</script");
 
 /**
  * Script configuration key

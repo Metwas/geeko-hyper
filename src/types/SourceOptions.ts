@@ -22,12 +22,12 @@
  */
 export type SourceOptions = {
        /**
-        * Wraps the source @see Buffer in the specified string tag. Defaults to <script> if set to true
+        * Wraps the source @see Buffer in the specified string tag.
         *
         * @public
         * @type {Boolean | String}
         */
-       wrap?: boolean | string;
+       wrap?: boolean;
 
        /**
         * Optional source version filter

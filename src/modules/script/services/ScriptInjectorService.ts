@@ -30,7 +30,6 @@ export class ScriptInjectorService {
        /**
         * @public
         * @param {IScriptSourceProvider} sourceProvider
-        * @param {LogService} logger
         */
        public constructor(
               public readonly sourceProvider: IScriptSourceProvider,

@@ -98,10 +98,7 @@ export class ScriptStreamService {
 
               // Handle 404 if file doesn't exist
               if (!stat?.isFile()) {
-                     return await ScriptStreamService.NOT_FOUND(
-                            request,
-                            response,
-                     );
+                     return await ScriptStreamService.NOT_FOUND(response);
               }
 
               if (source && needle) {
@@ -125,14 +122,10 @@ export class ScriptStreamService {
         * Streams the default dashboard/home script
         *
         * @public
-        * @param {Request} request
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       public static async HOME(
-              request: Request,
-              response: Response,
-       ): Promise<void> {
+       public static async HOME(response: Response): Promise<void> {
               return streamStatusScript(DEFAULT_DASHBOARD_SCRIPT, response);
        }
 
@@ -140,14 +133,10 @@ export class ScriptStreamService {
         * Streams the 404 'Not found' @see Script or text
         *
         * @public
-        * @param {Request} request
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       public static async NOT_FOUND(
-              request: Request,
-              response: Response,
-       ): Promise<void> {
+       public static async NOT_FOUND(response: Response): Promise<void> {
               return streamStatusScript(DEFAULT_404_SCRIPT, response);
        }
 
@@ -155,14 +144,10 @@ export class ScriptStreamService {
         * Streams a the predefined 'error' @see Script or text
         *
         * @public
-        * @param {Request} request
         * @param {Response} response
         * @returns {Promise<void>}
         */
-       public static async ERROR(
-              request: Request,
-              response: Response,
-       ): Promise<void> {
+       public static async ERROR(response: Response): Promise<void> {
               return streamStatusScript(DEFAULT_ERROR_SCRIPT, response);
        }
 }
