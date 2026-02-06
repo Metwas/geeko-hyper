@@ -21,6 +21,7 @@ import {
        GLOBAL_CONFIGURATION_PROVIDER,
        GLOBAL_LOG_PROVIDER,
 } from "../../global/injector/inject.tokens";
+
 import { injectConfigurationService } from "../../global/injector/ConfigurationProvider";
 import { injectLogProvider } from "../../global/injector/LogProvider";
 import { Module } from "@nestjs/common";

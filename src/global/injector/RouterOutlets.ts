@@ -100,8 +100,8 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                                           const instance: RouterOutlet =
                                                  new target(script, logger);
 
-                                          instance.name(metadata.path);
-
+                                          instance.root(metadata.path);
+                                          
                                           if (apis) {
                                                  for (
                                                         ;

@@ -45,7 +45,7 @@ export class WebSocketRouterOutlet extends RouterOutlet {
               public logger?: LogService,
               router?: Router,
        ) {
-              super(router);
+              super("ws", router);
        }
 
        /**
