@@ -25,9 +25,9 @@ import {
 
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
 import { ScriptService } from "../../modules/script/services/ScriptService";
+import { SCRIPT_COOKIE_TAG } from "../../global/constants";
 import { Request, Response, Router } from "hyper-express";
 import { RouteOutlet } from "../decorators/RouteOutlet";
-import { extractKeyFromUrl } from "../../tools/text";
 import { Script } from "../../types/Script";
 import { Get } from "../decorators/RESTful";
 import { RouterOutlet } from "./Router";
@@ -71,30 +71,30 @@ export class ScriptRouterOutlet extends RouterOutlet {
                             `Invalid [GET] request, url [${request.url}]`,
                      );
 
-                     return await ScriptStreamService.ERROR(request, response);
+                     return await ScriptStreamService.ERROR(response);
               }
 
               let url: string = request.url;
-              let referer: string = request.headers["referer"];
+              let referer: string = request.cookies[SCRIPT_COOKIE_TAG];
 
-              let id: string | undefined = extractKeyFromUrl(
-                     referer ?? url,
-                     GLOBAL_SCRIPTS_URI,
-              );
+              const indexOf: number = url.indexOf(GLOBAL_SCRIPTS_URI);
+              let id: string | undefined =
+                     indexOf > -1
+                            ? url.substring(
+                                     indexOf + GLOBAL_SCRIPTS_URI.length + 1,
+                              )
+                            : void 0;
 
               let resourceRequest: boolean = false;
 
-              if (referer) {
-                     /** if no id was provided, check the @see referer header */
-                     const referer: string = request.headers["referer"] ?? url;
-                     id = extractKeyFromUrl(referer, GLOBAL_SCRIPTS_URI);
-
+              if ((!id && referer) || (id && id.indexOf(".") > -1)) {
+                     id = referer;
                      resourceRequest = true;
               }
 
               if (!id) {
                      response.header["body"] = "No script is was specified";
-                     return ScriptStreamService.ERROR(request, response);
+                     return ScriptStreamService.ERROR(response);
               }
 
               /** Hack to allow for recursive @see iframes by exploiting the url, but remove it at this stage */
@@ -108,7 +108,6 @@ export class ScriptRouterOutlet extends RouterOutlet {
 
                      if (!script) {
                             return await ScriptStreamService.NOT_FOUND(
-                                   request,
                                    response,
                             );
                      }
@@ -129,6 +128,8 @@ export class ScriptRouterOutlet extends RouterOutlet {
                                           "application/octet-stream",
                             );
                      } else {
+                            response.cookie(SCRIPT_COOKIE_TAG, id);
+
                             path =
                                    script.path ??
                                    join(script.root, script.file);
