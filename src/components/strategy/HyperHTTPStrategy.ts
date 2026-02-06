@@ -100,17 +100,17 @@ export class HyperExpressStrategy
                                           outlet.router();
 
                                    if (router) {
-                                          let name: string =
+                                          let root: string =
                                                  outlet
-                                                        .name()
+                                                        .root()
                                                         ?.replace(/^\//g, "") ??
                                                  "";
 
                                           this.log.debug(
-                                                 `Attaching router outlet [${name ?? "::" + index}]`,
+                                                 `Attaching router outlet [${outlet.name}] at [${root || "/"}]`,
                                           );
 
-                                          this._server?.use(`/${name}`, router);
+                                          this._server?.use(`/${root}`, router);
                                    }
                             }
                      }

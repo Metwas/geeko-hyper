@@ -17,37 +17,28 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-import { exists } from "@geeko/configuration";
-import { Stats, promises } from "node:fs";
-import { lookup } from "./mime/lookup";
+import { mime_types_extensions } from "./extensions";
+import { parse, ParsedPath } from "node:path";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 /**
- * Awaitable FS @see Stats helper
- *
- * @public
- * @returns {Promise<Stats>}
- */
-export const getFsStat = async (path: string): Promise<Stats | undefined> => {
-       try {
-              if ((await exists(path)) === true) {
-                     return await promises.stat(path);
-              }
-
-              return void 0;
-       } catch (error) {
-              return void 0;
-       }
-};
-
-/**
- * Gets the mime file type from the given extension
+ * Attempts to get the mime-type from the provided file path
  *
  * @public
  * @param {String} path
- * @returns {String}
+ * @returns {String | undefined}
  */
-export const getFileType = (path: string): string => {
-       return lookup(path) ?? "application/octet-stream";
+export const lookup = (path: string): string | undefined => {
+       const parsed: ParsedPath = parse(path);
+
+       if (!parsed.ext) {
+              return void 0;
+       }
+
+       const mime: string = mime_types_extensions[parsed.ext];
+
+       if (mime) {
+              return mime;
+       }
 };

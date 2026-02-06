@@ -20,6 +20,8 @@
 import {
        GLOBAL_SCRIPTS_URI,
        GLOBAL_ROOT_URI,
+       IFRAME_URL_REGEX,
+       SCRIPT_ID_REGEX,
 } from "../../global/scripts/paths";
 
 import { ScriptStreamService } from "../../modules/script/services/ScriptStreamService";
@@ -27,12 +29,12 @@ import { ScriptService } from "../../modules/script/services/ScriptService";
 import { SCRIPT_COOKIE_TAG } from "../../global/constants";
 import { Request, Response, Router } from "hyper-express";
 import { RouteOutlet } from "../decorators/RouteOutlet";
+import { getFileType } from "../../tools/fs";
 import { Get } from "../decorators/RESTful";
 import { Script } from "src/types/Script";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
 import { join } from "node:path";
-import mime from "mime-types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -52,7 +54,7 @@ export class CoreRouterOutlet extends RouterOutlet {
               public logger?: LogService,
               router?: Router,
        ) {
-              super(router);
+              super("core", router);
        }
 
        /**
@@ -65,10 +67,13 @@ export class CoreRouterOutlet extends RouterOutlet {
         */
        @Get("*")
        public async get(request: Request, response: Response): Promise<void> {
-              const url: string = request.url;
+              const url: string = request.url
+                     .replace(IFRAME_URL_REGEX, "")
+                     .replace(SCRIPT_ID_REGEX, "");
+
               const id: string = request.cookies[SCRIPT_COOKIE_TAG];
 
-              if (id) {
+              if (id && url !== "/") {
                      if (!this.script) {
                             this.logger?.debug(
                                    `Invalid [GET] request, url [${url}]`,
@@ -92,12 +97,7 @@ export class CoreRouterOutlet extends RouterOutlet {
                      );
 
                      let path: string = join(script.root, resourceFile);
-
-                     response.header(
-                            "Content-Type",
-                            mime.lookup(resourceFile) ||
-                                   "application/octet-stream",
-                     );
+                     response.header("Content-Type", getFileType(resourceFile));
 
                      return await streamer.stream(
                             path,

@@ -33,7 +33,6 @@ import { Get } from "../decorators/RESTful";
 import { RouterOutlet } from "./Router";
 import { LogService } from "@geeko/log";
 import { join } from "node:path";
-import mime from "mime-types";
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_-           _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
@@ -53,7 +52,7 @@ export class ScriptRouterOutlet extends RouterOutlet {
               public logger?: LogService,
               router?: Router,
        ) {
-              super(router);
+              super("scripts", router);
        }
 
        /**
@@ -121,12 +120,6 @@ export class ScriptRouterOutlet extends RouterOutlet {
                             );
 
                             path = join(script.root, resourceFile);
-
-                            response.header(
-                                   "Content-Type",
-                                   mime.lookup(resourceFile) ||
-                                          "application/octet-stream",
-                            );
                      } else {
                             response.cookie(SCRIPT_COOKIE_TAG, id);
 
