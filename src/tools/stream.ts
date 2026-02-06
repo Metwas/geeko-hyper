@@ -169,10 +169,10 @@ export const replaceStream = (needle: Buffer, replacer: Buffer): Transform => {
  * Intercepts the stream pipe and injects the @see Buffer source from the given @see injectable options
  *
  * @public
- * @param {send.SendStream} stream
- * @param {Buffer} token
- * @param {String} source
- * @param {ServerResponse} response
+ * @param {String} path
+ * @param {Buffer} needle
+ * @param {Buffer} replacer
+ * @param {Response} response
  */
 export const injectStream = async (
        path: string,
@@ -190,7 +190,6 @@ export const injectStream = async (
        const transform: Transform = replaceStream(needle, replacer);
 
        fsStream.pipe(transform);
-
        return response.stream(transform);
 };
 
