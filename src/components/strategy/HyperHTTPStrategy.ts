@@ -38,6 +38,7 @@ export class HyperExpressStrategy
        /**
         * @public
         * @param {ConfigurationService} configuration
+        * @param {Array<RouterOutlet>} routerOutlets
         * @param {LogService} log
         * @param {ServerConstructorOptions} options
         */
