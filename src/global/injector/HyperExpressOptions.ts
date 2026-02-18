@@ -35,7 +35,11 @@ export const injectHyperOptions = (): Provider<
        return {
               provide: HYPER_CTOR_OPTIONS,
               useFactory: (): ServerConstructorOptions | undefined => {
-                     return void 0;
+                     return {
+                            uws: {
+                                   caseSensitive: true,
+                            },
+                     } as any;
               },
        };
 };

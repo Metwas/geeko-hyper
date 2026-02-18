@@ -17,8 +17,13 @@
 
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+import {
+       Server as HyperExpressServer,
+       ServerConstructorOptions,
+       Router,
+} from "hyper-express";
+
 import { CustomTransportStrategy, Server } from "@nestjs/microservices";
-import { Server as HyperExpressServer, Router } from "hyper-express";
 import { ConnectionOptions } from "../../types/ConnectionOptions";
 import { ConfigurationService } from "@geeko/configuration";
 import { RouterOutlet } from "../routers/Router";
@@ -46,7 +51,7 @@ export class HyperExpressStrategy
               public readonly configuration: ConfigurationService,
               public readonly routerOutlets: Array<RouterOutlet>,
               public readonly log: LogService,
-              options?: any,
+              options?: ServerConstructorOptions,
        ) {
               super();
               /** Create new @see HyperExpressServer server instance */
