@@ -18,6 +18,11 @@
 /**_-_-_-_-_-_-_-_-_-_-_-_-_- Imports  _-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 import {
+       SCRIPT_ENTRY_NAME,
+       SCRIPT_MANIFEST,
+} from "../../../global/injector/script.tokens";
+
+import {
        FILE_CHANGE_EVENT,
        FILE_CREATE_EVENT,
        FILE_DELETE_EVENT,
@@ -29,11 +34,6 @@ import {
        extension,
        filename,
 } from "@geeko/os";
-
-import {
-       SCRIPT_ENTRY_NAME,
-       SCRIPT_MANIFEST,
-} from "../../../global/injector/script.tokens";
 
 import { Script, ScriptShell } from "../../../types/Script";
 import { isAbsolute, join, resolve, sep } from "node:path";
@@ -185,7 +185,7 @@ export class ScriptCollection extends Collection<Script, string> {
                                    /** Attempt to get @see Script name from the directory */
                                    const directories: Array<string> =
                                           fileDirectory.split(sep);
-                                   let name: string = "";
+                                   let name: string = data.name ?? "";
 
                                    let cindex: number = directories.length - 1;
                                    /** Iterate until the first valid @see directory is returned */
@@ -211,6 +211,7 @@ export class ScriptCollection extends Collection<Script, string> {
                                    );
 
                                    const script: Script = {
+                                          inject: data.inject,
                                           root: fileDirectory,
                                           file: fileName,
                                           shell: shell,
