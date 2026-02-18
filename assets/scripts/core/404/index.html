@@ -83,7 +83,7 @@
                             }
                      }
               </style>
-              <canvas id="base-canvas"></canvas>
+              <canvas id="canvas"></canvas>
               <div class="container">
                      <h1>Page was not found</h1>
                      <div class="center">
@@ -108,7 +108,6 @@
                      </div>
               </div>
               <script type="text/javascript">
-                     let canvas = void 0;
                      let context = void 0;
                      let border = 1;
                      let scaleX = 0;
@@ -187,7 +186,6 @@
                      }
 
                      window.onload = function () {
-                            canvas = document.getElementById("base-canvas");
                             context = canvas.getContext("2d");
 
                             resizeCanvas(canvas, context);
