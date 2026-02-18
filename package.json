@@ -21,7 +21,7 @@
        "dependencies": {
               "@geeko/configuration": "^0.3.3",
               "@geeko/core": "^1.1.0",
-              "@geeko/log": "^1.3.0",
+              "@geeko/log": "^1.3.1",
               "@geeko/meta": "^1.4.1",
               "@geeko/net": "^0.3.2",
               "@geeko/os": "^1.3.1",
@@ -40,7 +40,7 @@
               "@nestjs/schematics": "^11.0.9",
               "@nestjs/testing": "^11.1.13",
               "@types/jest": "^30.0.0",
-              "@types/node": "^22.19.9",
+              "@types/node": "^22.19.11",
               "globals": "^16.5.0",
               "jest": "^30.2.0",
               "node-loader": "^2.1.0",
