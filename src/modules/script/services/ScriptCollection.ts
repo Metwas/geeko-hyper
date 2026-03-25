@@ -145,7 +145,7 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this.log?.error(error as Error);
+                     this.log?.error(error);
               }
        }
 
@@ -304,7 +304,7 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this.log?.error(error as Error);
+                     this.log?.error(error);
               }
        }
 
@@ -353,7 +353,7 @@ export class ScriptCollection extends Collection<Script, string> {
                             }
                      }
               } catch (error) {
-                     this.log?.error(error as Error);
+                     this.log?.error(error);
               }
        }
 

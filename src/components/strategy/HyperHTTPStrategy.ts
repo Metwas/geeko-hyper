@@ -132,7 +132,7 @@ export class HyperExpressStrategy
                             callback();
                      }
               } catch (error) {
-                     this.log.error(error as Error);
+                     this.log.error(error);
               }
        }
 

@@ -101,7 +101,7 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                                                  new target(script, logger);
 
                                           instance.root(metadata.path);
-                                          
+
                                           if (apis) {
                                                  for (
                                                         ;
@@ -161,9 +161,7 @@ export const injectRouterOutlets = (): Provider<Array<RouterOutlet>> => {
                                                  `Adding route [${metadata.path}]`,
                                           );
                                    } catch (error) {
-                                          logger.error(
-                                                 (error as Error).message,
-                                          );
+                                          logger.error(error);
                                    }
                             }
                      }
